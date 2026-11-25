@@ -252,11 +252,11 @@
             ${q.prevClose ? `<span class="small" style="color:var(--text-2)">Fechamento anterior ${fmt.num(q.prevClose, 4)}</span>` : ''}</div>
         </div>
         <dl class="facts h-facts">
-            <div><dt>Mín. – máx. do dia</dt><dd class="pair">${q.high ? rangePair(q.low, q.high, ' – ') : '—'}</dd></div>
+            <div><dt>Faixa do dia</dt><dd class="pair">${q.high ? rangePair(q.low, q.high, ' – ') : '—'}</dd></div>
             <div><dt title="Taxa oficial calculada pelo Banco Central">PTAX (BCB)</dt><dd>${ptax ? fmt.num(ptax.value, 4) + ' <small style="color:var(--text-2)">' + fmt.dateBR(ptax.date).slice(0, 5) + '</small>' : '—'}</dd></div>
             <div><dt>1 mês</dt><dd class="${fmt.signClass(chgOver(a, 21))}">${fmt.pct(chgOver(a, 21))}</dd></div>
             <div><dt>12 meses</dt><dd class="${fmt.signClass(chgOver(a, 252))}">${fmt.pct(chgOver(a, 252))}</dd></div>
-            <div><dt>52 semanas</dt><dd class="pair">${rangePair(a.low52, a.high52, ' – ')}</dd></div>
+            <div><dt>Faixa 52 semanas</dt><dd class="pair">${rangePair(a.low52, a.high52, ' – ')}</dd></div>
             <div><dt>Volatilidade 21d</dt><dd>${vol != null ? fmt.pct(vol, 1, false) + ' a.a.' : '—'}</dd></div>
         </dl>
         <div class="h-chart">
