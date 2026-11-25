@@ -151,9 +151,10 @@ main { padding: 14px 16px 8px; max-width: 1180px; margin: 0 auto; }
   .hero .facts { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 8px; }
   .hero .facts div { padding: 6px 8px 6px 0; }
   .hero .facts dt { font-size: 11.5px; }
-  .hero .facts dd { font-size: 13.5px; white-space: normal; line-height: 1.25; }
+  .hero .facts dd { font-size: 13.5px; }
+  .hero .facts dd.pair { font-size: 12.5px; letter-spacing: -.01em; }
   .hero .src { margin-top: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .hero .guil { width: 240px; height: 240px; right: -80px; top: -70px; }
+  .hero .guil { width: 240px; height: 240px; right: -80px; top: -70px; opacity: .18; }
   .macro-bed .bed-head { flex-direction: column; align-items: flex-start; gap: 2px; }
 }
 .hero .row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
@@ -187,7 +188,7 @@ main { padding: 14px 16px 8px; max-width: 1180px; margin: 0 auto; }
 .asset { margin: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: transform .35s var(--ease), border-color .2s; }
 .asset:hover { border-color: color-mix(in oklab, var(--ink) 60%, var(--rule)); }
 .asset:active { transform: scale(.985); }
-.asset .guil { width: 170px; height: 170px; right: -56px; top: 6px; }
+.asset .guil { width: 130px; height: 130px; right: -46px; bottom: -52px; }
 .asset .name { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px 14px 0; font-weight: 700; font-size: 13.5px; color: var(--ink); }
 .asset .name svg { width: 16px; height: 16px; color: var(--text-2); flex: none; }
 .faces {
@@ -207,8 +208,9 @@ main { padding: 14px 16px 8px; max-width: 1180px; margin: 0 auto; }
 .face .range { margin-top: 10px; }
 .range-ends { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--text-2); font-variant-numeric: tabular-nums; }
 .mini { height: 36px; margin-top: 2px; }
-.foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 0 14px 10px; }
-.foot .sub { font-size: 12px; }
+.foot { display: flex; align-items: center; justify-content: flex-start; gap: 6px; padding: 0 64px 10px 14px; }
+.foot .dots { order: -1; margin: -12px 0 -10px -9px; }
+.foot .sub { font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 .dots { display: inline-flex; gap: 0; flex: none; margin: -12px -8px -10px 0; }
 .dots button { width: 32px; height: 44px; border: 0; background: transparent; padding: 0; display: grid; place-items: center; cursor: pointer; }
 .dots button::before { content: ""; width: 7px; height: 7px; border-radius: 4px; background: var(--muted); transition: width .3s var(--ease), background .3s; }
@@ -422,7 +424,7 @@ main { padding: 14px 16px 8px; max-width: 1180px; margin: 0 auto; }
   .bed[data-span="3"] .notes { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .hero .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .hero .numeral { font-size: 80px; }
-  .hero .guil { width: 420px; height: 420px; left: 150px; right: auto; top: -170px; }
+  .hero .guil { width: 420px; height: 420px; left: 150px; right: auto; top: -170px; opacity: .1; }
   .macro-bed { padding: 18px 20px 12px; }
 }
 @media (prefers-reduced-motion: reduce) {

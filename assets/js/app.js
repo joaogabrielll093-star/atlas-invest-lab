@@ -156,7 +156,7 @@
       </section>`;
     const dots = FACES.map((l, i) => `<button type="button" data-face="${i}" aria-label="${l}" aria-current="${i === 0}"></button>`).join('');
     return `${open}<div class="faces" tabindex="0" aria-label="Deslize para ver hoje, 1 mês e 12 meses">${f1}${f2}${f3}</div>
-      <div class="foot"><span class="sub">${esc(q.source)}</span><span class="dots" role="group" aria-label="Face da cédula">${dots}</span></div></article>`;
+      <div class="foot"><span class="sub" title="${esc(q.source)}">${esc(q.source.replace(/ \(.*\)$/, ''))}</span><span class="dots" role="group" aria-label="Face da cédula">${dots}</span></div></article>`;
   }
 
   // ---- Virar cédulas: arrasto (dedo ou mouse), pontos e seletor global ----
@@ -246,11 +246,11 @@
             ${q.prevClose ? `<span class="small" style="color:var(--text-2)">Fechamento anterior ${fmt.num(q.prevClose, 4)}</span>` : ''}</div>
         </div>
         <dl class="facts h-facts">
-            <div><dt>Máx. / mín. do dia</dt><dd>${q.high ? fmt.num(q.high, 4) + ' / ' + fmt.num(q.low, 4) : '—'}</dd></div>
+            <div><dt>Máx. / mín. do dia</dt><dd class="pair">${q.high ? fmt.num(q.high, 4) + ' / ' + fmt.num(q.low, 4) : '—'}</dd></div>
             <div><dt title="Taxa oficial calculada pelo Banco Central">PTAX (BCB)</dt><dd>${ptax ? fmt.num(ptax.value, 4) + ' <small style="color:var(--text-2)">' + fmt.dateBR(ptax.date).slice(0, 5) + '</small>' : '—'}</dd></div>
             <div><dt>1 mês</dt><dd class="${fmt.signClass(chgOver(a, 21))}">${fmt.pct(chgOver(a, 21))}</dd></div>
             <div><dt>12 meses</dt><dd class="${fmt.signClass(chgOver(a, 252))}">${fmt.pct(chgOver(a, 252))}</dd></div>
-            <div><dt>52 semanas</dt><dd>${fmt.num(a.low52, 4)} – ${fmt.num(a.high52, 4)}</dd></div>
+            <div><dt>52 semanas</dt><dd class="pair">${fmt.num(a.low52, 2)} – ${fmt.num(a.high52, 2)}</dd></div>
             <div><dt>Volatilidade 21d</dt><dd>${vol != null ? fmt.pct(vol, 1, false) + ' a.a.' : '—'}</dd></div>
         </dl>
         <div class="h-chart">
