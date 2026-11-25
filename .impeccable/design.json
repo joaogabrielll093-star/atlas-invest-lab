@@ -1,0 +1,550 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-25T19:10:00Z",
+  "title": "Design System: Atlas Invest Lab",
+  "extensions": {
+    "colorMeta": {
+      "ground": {
+        "role": "neutral",
+        "displayName": "Azul-Tinta Noturno",
+        "canonical": "oklch(17% 0.05 262)",
+        "tonalRamp": [
+          "oklch(15% 0.050 262)",
+          "oklch(26% 0.050 262)",
+          "oklch(38% 0.050 262)",
+          "oklch(49% 0.050 262)",
+          "oklch(61% 0.050 262)",
+          "oklch(72% 0.050 262)",
+          "oklch(84% 0.050 262)",
+          "oklch(95% 0.050 262)"
+        ]
+      },
+      "ground-2": {
+        "role": "neutral",
+        "displayName": "Tinta Funda",
+        "canonical": "oklch(20% 0.055 262)",
+        "tonalRamp": [
+          "oklch(15% 0.055 262)",
+          "oklch(26% 0.055 262)",
+          "oklch(38% 0.055 262)",
+          "oklch(49% 0.055 262)",
+          "oklch(61% 0.055 262)",
+          "oklch(72% 0.055 262)",
+          "oklch(84% 0.055 262)",
+          "oklch(95% 0.055 262)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Superfície",
+        "canonical": "oklch(23% 0.058 262)",
+        "tonalRamp": [
+          "oklch(15% 0.058 262)",
+          "oklch(26% 0.058 262)",
+          "oklch(38% 0.058 262)",
+          "oklch(49% 0.058 262)",
+          "oklch(61% 0.058 262)",
+          "oklch(72% 0.058 262)",
+          "oklch(84% 0.058 262)",
+          "oklch(95% 0.058 262)"
+        ]
+      },
+      "surface-2": {
+        "role": "neutral",
+        "displayName": "Superfície Alta",
+        "canonical": "oklch(27% 0.062 262)",
+        "tonalRamp": [
+          "oklch(15% 0.062 262)",
+          "oklch(26% 0.062 262)",
+          "oklch(38% 0.062 262)",
+          "oklch(49% 0.062 262)",
+          "oklch(61% 0.062 262)",
+          "oklch(72% 0.062 262)",
+          "oklch(84% 0.062 262)",
+          "oklch(95% 0.062 262)"
+        ]
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Fio",
+        "canonical": "oklch(33% 0.065 262)",
+        "tonalRamp": [
+          "oklch(15% 0.065 262)",
+          "oklch(26% 0.065 262)",
+          "oklch(38% 0.065 262)",
+          "oklch(49% 0.065 262)",
+          "oklch(61% 0.065 262)",
+          "oklch(72% 0.065 262)",
+          "oklch(84% 0.065 262)",
+          "oklch(95% 0.065 262)"
+        ]
+      },
+      "rule-2": {
+        "role": "neutral",
+        "displayName": "Fio Forte",
+        "canonical": "oklch(41% 0.07 262)",
+        "tonalRamp": [
+          "oklch(15% 0.070 262)",
+          "oklch(26% 0.070 262)",
+          "oklch(38% 0.070 262)",
+          "oklch(49% 0.070 262)",
+          "oklch(61% 0.070 262)",
+          "oklch(72% 0.070 262)",
+          "oklch(84% 0.070 262)",
+          "oklch(95% 0.070 262)"
+        ]
+      },
+      "text": {
+        "role": "neutral",
+        "displayName": "Papel",
+        "canonical": "oklch(96.1% 0.013 267)",
+        "tonalRamp": [
+          "oklch(15% 0.006 267)",
+          "oklch(26% 0.007 267)",
+          "oklch(38% 0.008 267)",
+          "oklch(49% 0.009 267)",
+          "oklch(61% 0.010 267)",
+          "oklch(72% 0.011 267)",
+          "oklch(84% 0.012 267)",
+          "oklch(95% 0.013 267)"
+        ]
+      },
+      "text-2": {
+        "role": "neutral",
+        "displayName": "Papel Velho",
+        "canonical": "oklch(81.9% 0.036 266)",
+        "tonalRamp": [
+          "oklch(15% 0.018 266)",
+          "oklch(26% 0.021 266)",
+          "oklch(38% 0.024 266)",
+          "oklch(49% 0.027 266)",
+          "oklch(61% 0.030 266)",
+          "oklch(72% 0.033 266)",
+          "oklch(84% 0.035 266)",
+          "oklch(95% 0.032 266)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Grafite Claro",
+        "canonical": "oklch(72.5% 0.049 267)",
+        "tonalRamp": [
+          "oklch(15% 0.026 267)",
+          "oklch(26% 0.030 267)",
+          "oklch(38% 0.035 267)",
+          "oklch(49% 0.040 267)",
+          "oklch(61% 0.044 267)",
+          "oklch(72% 0.049 267)",
+          "oklch(84% 0.045 267)",
+          "oklch(95% 0.040 267)"
+        ]
+      },
+      "ink-100": {
+        "role": "primary",
+        "displayName": "Verde-Garoupa (R$100)",
+        "canonical": "oklch(72.9% 0.117 179)",
+        "tonalRamp": [
+          "oklch(15% 0.040 179)",
+          "oklch(26% 0.072 179)",
+          "oklch(38% 0.083 179)",
+          "oklch(49% 0.094 179)",
+          "oklch(61% 0.105 179)",
+          "oklch(72% 0.116 179)",
+          "oklch(84% 0.106 179)",
+          "oklch(95% 0.040 179)"
+        ]
+      },
+      "ink-5": {
+        "role": "secondary",
+        "displayName": "Violeta-Garça (R$5)",
+        "canonical": "oklch(68.7% 0.171 303)",
+        "tonalRamp": [
+          "oklch(15% 0.040 303)",
+          "oklch(26% 0.108 303)",
+          "oklch(38% 0.125 303)",
+          "oklch(49% 0.142 303)",
+          "oklch(61% 0.159 303)",
+          "oklch(72% 0.166 303)",
+          "oklch(84% 0.149 303)",
+          "oklch(95% 0.040 303)"
+        ]
+      },
+      "ink-2": {
+        "role": "secondary",
+        "displayName": "Azul-Tartaruga (R$2)",
+        "canonical": "oklch(71.1% 0.070 248)",
+        "tonalRamp": [
+          "oklch(15% 0.037 248)",
+          "oklch(26% 0.044 248)",
+          "oklch(38% 0.051 248)",
+          "oklch(49% 0.057 248)",
+          "oklch(61% 0.064 248)",
+          "oklch(72% 0.070 248)",
+          "oklch(84% 0.063 248)",
+          "oklch(95% 0.040 248)"
+        ]
+      },
+      "ink-20": {
+        "role": "secondary",
+        "displayName": "Amarelo-Mico (R$20)",
+        "canonical": "oklch(83.7% 0.154 87)",
+        "tonalRamp": [
+          "oklch(15% 0.040 87)",
+          "oklch(26% 0.091 87)",
+          "oklch(38% 0.104 87)",
+          "oklch(49% 0.116 87)",
+          "oklch(61% 0.129 87)",
+          "oklch(72% 0.141 87)",
+          "oklch(84% 0.154 87)",
+          "oklch(95% 0.040 87)"
+        ]
+      },
+      "ink-50": {
+        "role": "secondary",
+        "displayName": "Laranja-Onça (R$50)",
+        "canonical": "oklch(73.1% 0.152 54)",
+        "tonalRamp": [
+          "oklch(15% 0.040 54)",
+          "oklch(26% 0.094 54)",
+          "oklch(38% 0.108 54)",
+          "oklch(49% 0.123 54)",
+          "oklch(61% 0.137 54)",
+          "oklch(72% 0.151 54)",
+          "oklch(84% 0.139 54)",
+          "oklch(95% 0.040 54)"
+        ]
+      },
+      "ink-10": {
+        "role": "secondary",
+        "displayName": "Rosa-Arara (R$10)",
+        "canonical": "oklch(68.4% 0.184 344)",
+        "tonalRamp": [
+          "oklch(15% 0.040 344)",
+          "oklch(26% 0.116 344)",
+          "oklch(38% 0.135 344)",
+          "oklch(49% 0.153 344)",
+          "oklch(61% 0.172 344)",
+          "oklch(72% 0.178 344)",
+          "oklch(84% 0.160 344)",
+          "oklch(95% 0.040 344)"
+        ]
+      },
+      "up": {
+        "role": "tertiary",
+        "displayName": "Verde-Alta",
+        "canonical": "oklch(76.4% 0.159 159)",
+        "tonalRamp": [
+          "oklch(15% 0.040 159)",
+          "oklch(26% 0.096 159)",
+          "oklch(38% 0.111 159)",
+          "oklch(49% 0.125 159)",
+          "oklch(61% 0.139 159)",
+          "oklch(72% 0.154 159)",
+          "oklch(84% 0.150 159)",
+          "oklch(95% 0.040 159)"
+        ]
+      },
+      "down": {
+        "role": "tertiary",
+        "displayName": "Coral-Queda",
+        "canonical": "oklch(70.9% 0.183 28)",
+        "tonalRamp": [
+          "oklch(15% 0.040 28)",
+          "oklch(26% 0.114 28)",
+          "oklch(38% 0.132 28)",
+          "oklch(49% 0.150 28)",
+          "oklch(61% 0.167 28)",
+          "oklch(72% 0.181 28)",
+          "oklch(84% 0.164 28)",
+          "oklch(95% 0.040 28)"
+        ]
+      },
+      "warn": {
+        "role": "tertiary",
+        "displayName": "Âmbar-Aviso",
+        "canonical": "oklch(81.4% 0.149 79)",
+        "tonalRamp": [
+          "oklch(15% 0.040 79)",
+          "oklch(26% 0.089 79)",
+          "oklch(38% 0.101 79)",
+          "oklch(49% 0.114 79)",
+          "oklch(61% 0.127 79)",
+          "oklch(72% 0.139 79)",
+          "oklch(84% 0.147 79)",
+          "oklch(95% 0.040 79)"
+        ]
+      },
+      "on-ink": {
+        "role": "neutral",
+        "displayName": "Tinta sobre Cédula",
+        "canonical": "#04121a",
+        "tonalRamp": [
+          "oklch(15% 0.02 220)",
+          "oklch(26% 0.03 220)",
+          "oklch(38% 0.03 220)",
+          "oklch(49% 0.03 220)",
+          "oklch(61% 0.03 220)",
+          "oklch(72% 0.03 220)",
+          "oklch(84% 0.02 220)",
+          "oklch(95% 0.01 220)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display (numeral do herói)",
+        "purpose": "Numeral da cédula do dólar; 50px abaixo de 600px, 80px a partir de 960px."
+      },
+      "numeral": {
+        "displayName": "Numeral",
+        "purpose": "Valor de cada cédula de ativo (30px), da análise (32px) e dos indicadores macro (26px)."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Título das telas Análise, Backtest e Diário."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Nome do canteiro na tinta da cédula; o título do herói usa 750 a 17px."
+      },
+      "data": {
+        "displayName": "Data",
+        "purpose": "Valor das estatísticas do backtest e do diário."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Texto corrido e controles; rodapé limitado a 75ch."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Rótulos de fatos, faces, campos e procedência (12 a 12,5px)."
+      },
+      "input": {
+        "displayName": "Input",
+        "purpose": "Campos de formulário; 16px evita zoom no iPhone."
+      }
+    },
+    "shadows": [
+      {
+        "name": "scroll-edge",
+        "value": "0 10px 14px -8px rgba(0,0,0,.6)",
+        "purpose": "Sob a barra pegajosa do seletor de período."
+      },
+      {
+        "name": "float",
+        "value": "0 8px 22px rgba(0,0,0,.45)",
+        "purpose": "Dica do gráfico."
+      },
+      {
+        "name": "toast",
+        "value": "0 10px 30px rgba(0,0,0,.45)",
+        "purpose": "Avisos temporários."
+      },
+      {
+        "name": "knob",
+        "value": "0 1px 4px rgba(0,0,0,.45)",
+        "purpose": "Marcador de posição na faixa mínima–máxima."
+      },
+      {
+        "name": "focus-halo",
+        "value": "0 0 0 3px color-mix(in oklab, var(--accent) 25%, transparent)",
+        "purpose": "Halo de foco dos campos."
+      },
+      {
+        "name": "glass",
+        "value": "backdrop-filter: saturate(150%) blur(14px)",
+        "purpose": "Barra superior e barra de abas sobre o chão a 90–94%."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease",
+        "value": "cubic-bezier(.16, 1, .3, 1)",
+        "purpose": "Curva da casa: seletor, pontos da cédula, toque na cédula, toasts."
+      },
+      {
+        "name": "duration-state",
+        "value": "0.2s",
+        "purpose": "Fundo e borda de botões; borda da cédula no hover."
+      },
+      {
+        "name": "duration-select",
+        "value": "0.25s",
+        "purpose": "Troca do segmento selecionado."
+      },
+      {
+        "name": "duration-dots",
+        "value": "0.3s",
+        "purpose": "Ponto ativo alargando de 7 para 16px; saída de toast."
+      },
+      {
+        "name": "duration-press",
+        "value": "0.35s",
+        "purpose": "Cédula encolhendo para 0,985 ao toque."
+      },
+      {
+        "name": "face-flip",
+        "value": "scroll-snap-type: x mandatory + scrollTo smooth",
+        "purpose": "Virar a face da cédula por arrasto, pontos, teclado ou seletor global; instantâneo com prefers-reduced-motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "phone-max",
+        "value": "599px"
+      },
+      {
+        "name": "tablet",
+        "value": "640px"
+      },
+      {
+        "name": "desktop",
+        "value": "960px"
+      },
+      {
+        "name": "content-max",
+        "value": "1180px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Botão primário",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Ação principal (simular, salvar operação); verde-garoupa cheio.",
+      "html": "<button class=\"ds-btn ds-btn-primary\" type=\"button\">Rodar backtest</button>",
+      "css": ".ds-btn { display:inline-flex; align-items:center; justify-content:center; gap:6px; min-height:44px; padding:0 16px; border-radius:11px; border:1px solid var(--rule-2, oklch(41% .07 262)); background:var(--surface-2, oklch(27% .062 262)); color:var(--text, #eef2fb); font:650 14px/1 -apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif; cursor:pointer; transition:background .2s, border-color .2s; } .ds-btn-primary { background:var(--accent, #3dbfa8); border-color:var(--accent, #3dbfa8); color:#04121a; } .ds-btn-primary:hover { background:color-mix(in oklab, var(--accent, #3dbfa8) 85%, #fff); } .ds-btn:focus-visible { outline:2px solid var(--accent, #3dbfa8); outline-offset:2px; }"
+    },
+    {
+      "name": "Botão neutro",
+      "kind": "button",
+      "refersTo": "button",
+      "description": "Ações secundárias: exportar, importar, cancelar.",
+      "html": "<button class=\"ds-btn\" type=\"button\">Exportar CSV</button>",
+      "css": ".ds-btn { display:inline-flex; align-items:center; justify-content:center; gap:6px; min-height:44px; padding:0 16px; border-radius:11px; border:1px solid var(--rule-2, oklch(41% .07 262)); background:var(--surface-2, oklch(27% .062 262)); color:var(--text, #eef2fb); font:650 14px/1 -apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif; cursor:pointer; transition:background .2s, border-color .2s; } .ds-btn:hover { border-color:var(--text-2, #b9c4dc); } .ds-btn:focus-visible { outline:2px solid var(--accent, #3dbfa8); outline-offset:2px; }"
+    },
+    {
+      "name": "Botão de perigo",
+      "kind": "button",
+      "refersTo": "button-danger",
+      "description": "Excluir operação ou limpar dados.",
+      "html": "<button class=\"ds-btn-danger\" type=\"button\">Excluir</button>",
+      "css": ".ds-btn-danger { min-height:44px; padding:0 16px; border-radius:11px; background:transparent; border:1px solid color-mix(in oklab, var(--down, #ff6b5e) 55%, transparent); color:var(--down, #ff6b5e); font:650 14px/1 -apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif; cursor:pointer; transition:background .2s; } .ds-btn-danger:hover { background:color-mix(in oklab, var(--down, #ff6b5e) 12%, transparent); } .ds-btn-danger:focus-visible { outline:2px solid var(--accent, #3dbfa8); outline-offset:2px; }"
+    },
+    {
+      "name": "Campo",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Campo de formulário com 16px para evitar zoom no iPhone.",
+      "html": "<label class=\"ds-field\">Preço de entrada<input class=\"ds-input\" inputmode=\"decimal\" placeholder=\"5,4321\"></label>",
+      "css": ".ds-field { display:flex; flex-direction:column; gap:5px; font:600 12.5px/1.3 -apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif; color:var(--text-2, #b9c4dc); max-width:260px; } .ds-input { font:500 16px/1.2 -apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif; background:var(--ground-2, oklch(20% .055 262)); border:1px solid var(--rule-2, oklch(41% .07 262)); border-radius:10px; padding:10px 11px; min-height:44px; color:var(--text, #eef2fb); } .ds-input::placeholder { color:var(--muted, #98a6c6); } .ds-input:focus { border-color:var(--accent, #3dbfa8); outline:none; box-shadow:0 0 0 3px color-mix(in oklab, var(--accent, #3dbfa8) 25%, transparent); }"
+    },
+    {
+      "name": "Seletor de período",
+      "kind": "nav",
+      "refersTo": "segmented",
+      "description": "Vira todas as cédulas juntas: Hoje, 1 mês, 12 meses.",
+      "html": "<div class=\"ds-seg\" role=\"group\"><button type=\"button\" aria-pressed=\"true\">Hoje</button><button type=\"button\" aria-pressed=\"false\">1 mês</button><button type=\"button\" aria-pressed=\"false\">12 meses</button></div>",
+      "css": ".ds-seg { display:inline-grid; grid-auto-flow:column; grid-auto-columns:1fr; background:var(--surface, oklch(23% .058 262)); border:1px solid var(--rule, oklch(33% .065 262)); border-radius:12px; padding:3px; gap:2px; } .ds-seg button { border:0; background:transparent; color:var(--text-2, #b9c4dc); font:650 14px/1 -apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif; padding:8px 14px; border-radius:9px; min-height:38px; cursor:pointer; transition:background .25s cubic-bezier(.16, 1, .3, 1), color .25s cubic-bezier(.16, 1, .3, 1); } .ds-seg button:hover { color:var(--text, #eef2fb); } .ds-seg button[aria-pressed=\"true\"] { background:var(--text, #eef2fb); color:var(--ground, oklch(17% .05 262)); } .ds-seg button:focus-visible { outline:2px solid var(--accent, #3dbfa8); outline-offset:2px; }"
+    },
+    {
+      "name": "Chip de período do gráfico",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Intervalo do gráfico (1M, 3M, 6M, 1A); selecionado em papel ou na tinta do contexto.",
+      "html": "<div class=\"ds-chips\"><button type=\"button\" class=\"on\">1M</button><button type=\"button\">3M</button><button type=\"button\">6M</button><button type=\"button\">1A</button></div>",
+      "css": ".ds-chips { display:flex; gap:6px; flex-wrap:wrap; } .ds-chips button { border:1px solid var(--rule-2, oklch(41% .07 262)); background:var(--ground-2, oklch(20% .055 262)); color:var(--text-2, #b9c4dc); border-radius:999px; padding:6px 13px; font:600 13.5px/1 -apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif; min-height:36px; cursor:pointer; } .ds-chips button:hover { color:var(--text, #eef2fb); } .ds-chips button.on { background:var(--text, #eef2fb); border-color:var(--text, #eef2fb); color:var(--ground, oklch(17% .05 262)); } .ds-chips button:focus-visible { outline:2px solid var(--accent, #3dbfa8); outline-offset:2px; }"
+    },
+    {
+      "name": "Barra de abas",
+      "kind": "nav",
+      "refersTo": "tab-bar",
+      "description": "Quatro áreas; fixa no rodapé no celular, aba ativa em papel com ícone no acento.",
+      "html": "<nav class=\"ds-tabs\"><a href=\"#\" aria-current=\"page\"><svg viewBox=\"0 0 24 24\"><rect x=\"3\" y=\"3\" width=\"7\" height=\"9\" rx=\"1.5\"/><rect x=\"14\" y=\"3\" width=\"7\" height=\"5\" rx=\"1.5\"/><rect x=\"14\" y=\"12\" width=\"7\" height=\"9\" rx=\"1.5\"/><rect x=\"3\" y=\"16\" width=\"7\" height=\"5\" rx=\"1.5\"/></svg><span>Painel</span></a><a href=\"#\"><svg viewBox=\"0 0 24 24\"><path d=\"M3 20h18M5 16l4-5 4 3 6-8\"/></svg><span>Análise</span></a><a href=\"#\"><svg viewBox=\"0 0 24 24\"><path d=\"M12 8v4l3 2\"/><path d=\"M3.05 11a9 9 0 1 1 .5 4M3 4v5h5\"/></svg><span>Backtest</span></a><a href=\"#\"><svg viewBox=\"0 0 24 24\"><path d=\"M4 4h12a2 2 0 0 1 2 2v14H6a2 2 0 0 1-2-2z\"/><path d=\"M8 8h6M8 12h6M8 16h3M18 6h2v14\"/></svg><span>Diário</span></a></nav>",
+      "css": ".ds-tabs { display:grid; grid-template-columns:repeat(4, 1fr); height:64px; background:color-mix(in oklab, var(--ground-2, oklch(20% .055 262)) 94%, transparent); border-top:1px solid var(--rule, oklch(33% .065 262)); } .ds-tabs a { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; color:var(--muted, #98a6c6); text-decoration:none; font:600 11.5px/1 -apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif; } .ds-tabs a:hover { color:var(--text-2, #b9c4dc); } .ds-tabs svg { width:22px; height:22px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; } .ds-tabs a[aria-current=\"page\"] { color:var(--text, #eef2fb); } .ds-tabs a[aria-current=\"page\"] svg { stroke:var(--accent, #3dbfa8); } .ds-tabs a:focus-visible { outline:2px solid var(--accent, #3dbfa8); outline-offset:-4px; border-radius:6px; }"
+    },
+    {
+      "name": "Cédula de ativo",
+      "kind": "card",
+      "refersTo": "note-asset",
+      "description": "Assinatura: campo de tinta, guilhoché sangrando, numeral Archivo largo, face 'Hoje' de três deslizáveis.",
+      "html": "<article class=\"ds-note\" style=\"--ink:#e463b6\"><svg class=\"ds-guil\" viewBox=\"0 0 200 200\" aria-hidden=\"true\"><path d=\"M134,100 A34,34 0 1,1 133.9,99.9 M144,100 A44,44 0 1,1 143.9,99.9 M154,100 A54,54 0 1,1 153.9,99.9 M164,100 A64,64 0 1,1 163.9,99.9\"/></svg><div class=\"ds-name\">Bitcoin</div><div class=\"ds-face\"><div class=\"ds-numeral\"><span class=\"ds-cur\">US$</span>97.412,30</div><span class=\"ds-badge\">▲ 2,14% <small>24 h</small></span><span class=\"ds-fresh\">Ao vivo · Binance</span></div><div class=\"ds-foot\"><span>Binance</span><span class=\"ds-dots\"><i class=\"on\"></i><i></i><i></i></span></div></article>",
+      "css": ".ds-note { position:relative; overflow:hidden; isolation:isolate; width:280px; border-radius:14px; background:color-mix(in oklab, var(--ink) 16%, var(--surface, oklch(23% .058 262))); border:1px solid color-mix(in oklab, var(--ink) 34%, var(--rule, oklch(33% .065 262))); color:var(--text, #eef2fb); font:400 15px/1.45 -apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif; cursor:pointer; transition:transform .35s cubic-bezier(.16, 1, .3, 1), border-color .2s; } .ds-note:hover { border-color:color-mix(in oklab, var(--ink) 60%, var(--rule, oklch(33% .065 262))); } .ds-note:active { transform:scale(.985); } .ds-note:focus-visible { outline:2px solid var(--accent, #3dbfa8); outline-offset:2px; } .ds-guil { position:absolute; z-index:-1; width:170px; height:170px; right:-56px; top:6px; color:var(--ink); opacity:.2; pointer-events:none; } .ds-guil path { fill:none; stroke:currentColor; stroke-width:.7; vector-effect:non-scaling-stroke; } .ds-name { padding:12px 14px 0; font-weight:700; font-size:13.5px; color:var(--ink); } .ds-face { padding:4px 14px 8px; display:flex; flex-direction:column; gap:4px; align-items:flex-start; } .ds-numeral { font-family:\"Archivo Atlas\", \"Arial Narrow\", system-ui, sans-serif; font-stretch:125%; font-weight:800; font-size:30px; line-height:.95; letter-spacing:-.025em; font-variant-numeric:tabular-nums lining-nums; } .ds-cur { font-size:.46em; font-stretch:100%; font-weight:700; margin-right:.14em; color:var(--ink); letter-spacing:0; } .ds-badge { display:inline-flex; gap:4px; font-size:13px; font-weight:700; padding:3px 8px; border-radius:999px; color:var(--up, #3ad08c); background:color-mix(in oklab, var(--up, #3ad08c) 17%, transparent); font-variant-numeric:tabular-nums; } .ds-badge small { font-weight:600; opacity:.8; } .ds-fresh { display:inline-flex; align-items:center; gap:6px; font-size:12px; color:var(--text-2, #b9c4dc); } .ds-fresh::before { content:\"\"; width:7px; height:7px; border-radius:50%; background:var(--up, #3ad08c); } .ds-foot { display:flex; justify-content:space-between; align-items:center; padding:0 14px 10px; font-size:12px; color:var(--text-2, #b9c4dc); } .ds-dots { display:inline-flex; gap:6px; } .ds-dots i { width:7px; height:7px; border-radius:4px; background:var(--muted, #98a6c6); transition:width .3s cubic-bezier(.16, 1, .3, 1); } .ds-dots i.on { width:16px; background:var(--ink); }"
+    },
+    {
+      "name": "Cartão de ferramenta",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Contêiner neutro das telas Análise, Backtest e Diário.",
+      "html": "<section class=\"ds-card\"><div class=\"ds-card-head\"><h3>Resultado</h3><span>R$ simulado</span></div><div class=\"ds-stat\"><div class=\"k\">Retorno total</div><div class=\"v\">+18,4%</div></div></section>",
+      "css": ".ds-card { background:var(--surface, oklch(23% .058 262)); border:1px solid var(--rule, oklch(33% .065 262)); border-radius:14px; padding:14px; color:var(--text, #eef2fb); font:400 15px/1.45 -apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif; max-width:320px; } .ds-card-head { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px; } .ds-card-head h3 { margin:0; font-size:15px; font-weight:700; } .ds-card-head span { font-size:12px; color:var(--text-2, #b9c4dc); } .ds-stat { background:var(--surface, oklch(23% .058 262)); border:1px solid var(--rule, oklch(33% .065 262)); border-radius:12px; padding:10px 12px; } .ds-stat .k { font-size:12px; color:var(--text-2, #b9c4dc); } .ds-stat .v { font-family:\"Archivo Atlas\", \"Arial Narrow\", system-ui, sans-serif; font-stretch:110%; font-size:20px; font-weight:750; letter-spacing:-.01em; font-variant-numeric:tabular-nums; color:var(--up, #3ad08c); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Cédulas do Real",
+    "overview": "O painel é um maço de cédulas do Real visto no verso noturno. O chão é azul-tinta de verdade, não o navy genérico de fintech, e cada grupo de mercado ganha a tinta da sua cédula: R$100 garoupa verde-azulado para o dólar, R$5 violeta para juros e inflação, R$2 azul-acinzentado para moedas, R$20 amarelo-mico para a bolsa brasileira, R$50 laranja-onça para o mercado internacional, R$10 rosa-arara para cripto. A tinta não é um acento pontual: ela tinge o campo inteiro da cédula, a borda, o título do canteiro, o guilhoché, a linha do gráfico e o marcador da faixa.\n\nO valor é o protagonista, como na nota impressa: numerais em Archivo larga (wdth 125) e pesada (800), tabulares e alinhados, com o símbolo da moeda menor e na tinta da cédula. Atrás do numeral corre o guilhoché, linhas finas geradas em SVG na cor da tinta, sempre em baixa opacidade, como segurança gráfica que não compete com o dado. A densidade é de ferramenta de estudo: sessões longas, procedência de cada número sempre à vista, controles padrão da web.\n\nO movimento pertence ao gesto da cédula: arrastar vira a face (Hoje, 1 mês, 12 meses) com snap horizontal, e o seletor global vira todas juntas. A recusa explícita do mundo é o default de fintech escura com um único acento neon sobre cartões cinza iguais.",
+    "keyCharacteristics": [
+      "Chão azul-tinta em OKLCH (matiz 262) com quatro degraus tonais de superfície e dois de fio.",
+      "Seis tintas de cédula, uma por grupo de mercado, aplicadas como campo de cor via `data-ink`.",
+      "Numerais Archivo largos e pesados, tabulares, como o valor impresso na nota.",
+      "Guilhoché em linha fina (0,7) na tinta da cédula, opacidade 0,2 a 0,3.",
+      "Cédulas de ativo com três faces deslizáveis e pontos indicadores na tinta.",
+      "Estados (alta, queda, aviso) fora da família das cédulas, usados só com significado."
+    ],
+    "rules": [
+      {
+        "name": "The Uma Cédula, Uma Tinta Rule",
+        "body": "Cada grupo de mercado tem exatamente uma tinta, atribuída por `data-ink` no contêiner (que define `--ink`); tudo dentro herda dela. Nenhum componente escolhe a tinta por conta própria.",
+        "section": "colors"
+      },
+      {
+        "name": "The Campo de Tinta Rule",
+        "body": "A tinta ocupa região: o fundo da cédula é `color-mix(in oklab, var(--ink) 16%, var(--surface))` (14% no canteiro macro) e a borda é a tinta a 34% (30% no macro) sobre o fio. A tinta pura fica para título do canteiro, nome do ativo, símbolo da moeda, linha do gráfico e marcador.",
+        "section": "colors"
+      },
+      {
+        "name": "The Estado Não É Cédula Rule",
+        "body": "Alta, queda e aviso vivem fora da família das cédulas e só aparecem com significado (variação, saúde da fonte, frescor). Uma tinta de cédula nunca indica estado.",
+        "section": "colors"
+      },
+      {
+        "name": "The Valor Gravado Rule",
+        "body": "Todo número de mercado em destaque é Archivo com `font-stretch: 125%`, peso 800, `tabular-nums lining-nums` e entreletra −0,025em. O símbolo da moeda cai para 0,46em (0,42em no herói), largura 100%, peso 700, na tinta da cédula.",
+        "section": "typography"
+      },
+      {
+        "name": "The Algarismo Tabular Rule",
+        "body": "Tabelas, estatísticas, fatos, faixas, eixos e dicas de gráfico usam `font-variant-numeric: tabular-nums`; números nunca dançam ao atualizar.",
+        "section": "typography"
+      },
+      {
+        "name": "The Campo de 16 Rule",
+        "body": "Campos de formulário usam 16px para o iPhone não aplicar zoom automático.",
+        "section": "typography"
+      },
+      {
+        "name": "The Plano por Tinta Rule",
+        "body": "Cédulas e cartões repousam planos; a separação vem da tinta e do fio. Sombra só para o que flutua.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** atribuir a tinta pelo contêiner (`data-ink=\"100|5|2|20|50|10\"`) e deixar filhos herdarem `--ink`.",
+      "**Do** compor o fundo da cédula como mistura da tinta a 16% na superfície e a borda como tinta a 34% no fio.",
+      "**Do** escrever todo valor de mercado em destaque em Archivo wdth 125, peso 800, algarismos tabulares e alinhados.",
+      "**Do** desenhar o guilhoché em linha de 0,7 com `vector-effect: non-scaling-stroke`, na tinta, entre 0,2 e 0,3 de opacidade, atrás do conteúdo.",
+      "**Do** mostrar ao lado de cada número a fonte e o frescor com a etiqueta de ponto.",
+      "**Do** manter alvos de toque de pelo menos 44px em botões e campos, e campos com 16px de texto.",
+      "**Do** usar a curva `cubic-bezier(.16, 1, .3, 1)` nas transições de estado e respeitar `prefers-reduced-motion`."
+    ],
+    "donts": [
+      "**Don't** cair no default de fintech escura com um único acento neon sobre cartões cinza iguais.",
+      "**Don't** usar o navy genérico no lugar do azul-tinta `oklch(17% .05 262)`.",
+      "**Don't** usar uma tinta de cédula para indicar alta, queda ou aviso, nem uma cor de estado como tinta de grupo.",
+      "**Don't** dar a duas famílias de mercado a mesma tinta, nem trocar a tinta de um grupo entre telas.",
+      "**Don't** pôr sombra em cédulas ou cartões em repouso.",
+      "**Don't** usar a Archivo larga em texto corrido ou rótulos; ela é para valores e títulos."
+    ]
+  }
+}

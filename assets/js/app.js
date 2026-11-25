@@ -106,6 +106,12 @@
     requestAnimationFrame(() => applyFaces(false));
   }
 
+  /** Par mínima–máxima: 4 casas em telas largas e 3 no celular, arredondando para dentro da faixa real (nunca exagera). */
+  function rangePair(lo, hi, sep) {
+    if (!Number.isFinite(lo) || !Number.isFinite(hi)) return '—';
+    const in3lo = Math.ceil(lo * 1000) / 1000, in3hi = Math.floor(hi * 1000) / 1000;
+    return `<span class="d4">${fmt.num(lo, 4)}${sep}${fmt.num(hi, 4)}</span><span class="d3" title="${fmt.num(lo, 4)}${sep}${fmt.num(hi, 4)}">${fmt.num(in3lo, 3)}${sep}${fmt.num(in3hi, 3)}</span>`;
+  }
   const FACES = ['Hoje', '1 mês', '12 meses'];
   /** Faixa do dia (mínima → máxima) com a posição do preço atual. */
   function dayRange(a, q, dec) {
@@ -246,11 +252,11 @@
             ${q.prevClose ? `<span class="small" style="color:var(--text-2)">Fechamento anterior ${fmt.num(q.prevClose, 4)}</span>` : ''}</div>
         </div>
         <dl class="facts h-facts">
-            <div><dt>Máx. / mín. do dia</dt><dd class="pair">${q.high ? fmt.num(q.high, 4) + ' / ' + fmt.num(q.low, 4) : '—'}</dd></div>
+            <div><dt>Mín. – máx. do dia</dt><dd class="pair">${q.high ? rangePair(q.low, q.high, ' – ') : '—'}</dd></div>
             <div><dt title="Taxa oficial calculada pelo Banco Central">PTAX (BCB)</dt><dd>${ptax ? fmt.num(ptax.value, 4) + ' <small style="color:var(--text-2)">' + fmt.dateBR(ptax.date).slice(0, 5) + '</small>' : '—'}</dd></div>
             <div><dt>1 mês</dt><dd class="${fmt.signClass(chgOver(a, 21))}">${fmt.pct(chgOver(a, 21))}</dd></div>
             <div><dt>12 meses</dt><dd class="${fmt.signClass(chgOver(a, 252))}">${fmt.pct(chgOver(a, 252))}</dd></div>
-            <div><dt>52 semanas</dt><dd class="pair">${fmt.num(a.low52, 2)} – ${fmt.num(a.high52, 2)}</dd></div>
+            <div><dt>52 semanas</dt><dd class="pair">${rangePair(a.low52, a.high52, ' – ')}</dd></div>
             <div><dt>Volatilidade 21d</dt><dd>${vol != null ? fmt.pct(vol, 1, false) + ' a.a.' : '—'}</dd></div>
         </dl>
         <div class="h-chart">
