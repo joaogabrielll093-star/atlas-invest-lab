@@ -107,6 +107,14 @@
   }
 
   const FACES = ['Hoje', '1 mês', '12 meses'];
+  /** Faixa do dia (mínima → máxima) com a posição do preço atual. */
+  function dayRange(a, q, dec) {
+    if (!(q.high > q.low) || !Number.isFinite(q.price)) return '';
+    const pos = Math.max(0, Math.min(100, ((q.price - q.low) / (q.high - q.low)) * 100));
+    const lbl = q.changeLabel === '24 h' ? '24 h' : 'dia';
+    return `<div class="range" role="img" aria-label="Preço a ${Math.round(pos)}% entre a mínima e a máxima do ${lbl}"><i style="left:${pos.toFixed(1)}%"></i></div>
+      <div class="range-ends"><span>mín. ${lbl} ${fmt.num(q.low, dec)}</span><span>máx. ${fmt.num(q.high, dec)}</span></div>`;
+  }
   /** Cédula de um ativo com três faces (hoje, 1 mês, 12 meses), viradas por arrasto ou pelo seletor. */
   function assetCard(a) {
     const q = a.quote;
@@ -124,6 +132,7 @@
         <div class="numeral px">${numeral(a, q.price)}</div>
         <div class="line">${badge(q.changePct, q.changeLabel ? ` <small>${q.changeLabel}</small>` : '')}${brl}</div>
         ${freshTag(a.fresh)}
+        ${dayRange(a, q, dec)}
       </section>`;
     // Face 2: último mês
     const m = cl.slice(-22);
@@ -237,20 +246,20 @@
             ${q.prevClose ? `<span class="small" style="color:var(--text-2)">Fechamento anterior ${fmt.num(q.prevClose, 4)}</span>` : ''}</div>
         </div>
         <dl class="facts h-facts">
-            <div><dt>Máxima / mínima do dia</dt><dd>${q.high ? fmt.num(q.high, 4) + ' / ' + fmt.num(q.low, 4) : '—'}</dd></div>
-            <div><dt>PTAX do Banco Central</dt><dd>${ptax ? fmt.num(ptax.value, 4) + ' <small style="color:var(--text-2)">' + fmt.dateBR(ptax.date).slice(0, 5) + '</small>' : '—'}</dd></div>
-            <div><dt>Variação em 1 mês</dt><dd class="${fmt.signClass(chgOver(a, 21))}">${fmt.pct(chgOver(a, 21))}</dd></div>
-            <div><dt>Variação em 12 meses</dt><dd class="${fmt.signClass(chgOver(a, 252))}">${fmt.pct(chgOver(a, 252))}</dd></div>
-            <div><dt>Faixa de 52 semanas</dt><dd>${fmt.num(a.low52, 4)} – ${fmt.num(a.high52, 4)}</dd></div>
-            <div><dt>Volatilidade (21 dias)</dt><dd>${vol != null ? fmt.pct(vol, 1, false) + ' ao ano' : '—'}</dd></div>
+            <div><dt>Máx. / mín. do dia</dt><dd>${q.high ? fmt.num(q.high, 4) + ' / ' + fmt.num(q.low, 4) : '—'}</dd></div>
+            <div><dt title="Taxa oficial calculada pelo Banco Central">PTAX (BCB)</dt><dd>${ptax ? fmt.num(ptax.value, 4) + ' <small style="color:var(--text-2)">' + fmt.dateBR(ptax.date).slice(0, 5) + '</small>' : '—'}</dd></div>
+            <div><dt>1 mês</dt><dd class="${fmt.signClass(chgOver(a, 21))}">${fmt.pct(chgOver(a, 21))}</dd></div>
+            <div><dt>12 meses</dt><dd class="${fmt.signClass(chgOver(a, 252))}">${fmt.pct(chgOver(a, 252))}</dd></div>
+            <div><dt>52 semanas</dt><dd>${fmt.num(a.low52, 4)} – ${fmt.num(a.high52, 4)}</dd></div>
+            <div><dt>Volatilidade 21d</dt><dd>${vol != null ? fmt.pct(vol, 1, false) + ' a.a.' : '—'}</dd></div>
         </dl>
         <div class="h-chart">
           <div class="toolbar"><div class="chips" id="hero-range" role="group" aria-label="Período do gráfico">
             ${[[21, '1M'], [63, '3M'], [126, '6M'], [252, '1A']].map(([n, l]) => `<button type="button" data-r="${n}" class="${ui.heroRange === n ? 'on' : ''}">${l}</button>`).join('')}
           </div><a href="#analise" class="small" data-goto="USDBRL">Análise completa</a></div>
-          <div id="hero-chart" class="chart-box" style="height:220px"></div>
-          <p class="src">Arraste o dedo no gráfico para ver cada dia. Cotação: ${esc(q.source || '—')} · histórico: ${esc(a.histSource || '—')}. A PTAX é a taxa oficial do Banco Central; o comercial é negociado ao longo do dia.</p>
+          <div id="hero-chart" class="chart-box"></div>
         </div>
+        <p class="src h-src">Arraste no gráfico para ver cada dia · cotação ${esc(q.source || '—')}, histórico ${esc(a.histSource || '—')}</p>
       </div>`;
     drawHeroChart();
   }
@@ -261,8 +270,9 @@
     if (!box) return;
     const c = a.candles.slice(-ui.heroRange);
     if (c.length < 2) { box.innerHTML = '<p class="empty">Histórico indisponível.</p>'; return; }
+    const h = innerWidth < 600 ? 150 : 220;
     chart.line(box, {
-      dates: c.map((x) => x.date), height: 210,
+      dates: c.map((x) => x.date), height: h,
       series: [{ values: c.map((x) => x.close), color: INK_HEX[100], label: 'USD/BRL', area: true, width: 2 }],
       yFormat: (v) => fmt.num(v, 2), tooltipFormat: (v) => fmt.num(v, 4), ariaLabel: 'Gráfico do dólar',
     });

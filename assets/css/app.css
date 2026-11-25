@@ -10,15 +10,15 @@
 :root {
   color-scheme: dark;
   /* chão e superfícies (azul-tinta, verso noturno da cédula) */
-  --ground: #0b1020;
-  --ground-2: #0f1529;
-  --surface: #141b31;
-  --surface-2: #1a2340;
-  --rule: #26304f;
-  --rule-2: #34406a;
+  --ground: oklch(17% .05 262);
+  --ground-2: oklch(20% .055 262);
+  --surface: oklch(23% .058 262);
+  --surface-2: oklch(27% .062 262);
+  --rule: oklch(33% .065 262);
+  --rule-2: oklch(41% .07 262);
   --text: #eef2fb;
   --text-2: #b9c4dc;
-  --muted: #8e9bba;
+  --muted: #98a6c6;
   /* tintas das cédulas */
   --ink-100: #3dbfa8; /* garoupa — dólar (verde-azulado da cédula de R$100) */
   --ink-5: #b07cf0;   /* garça — juros e inflação */
@@ -142,8 +142,20 @@ main { padding: 14px 16px 8px; max-width: 1180px; margin: 0 auto; }
 .hero .numeral { font-size: clamp(46px, 13vw, 76px); margin: 10px 0 8px; }
 .numeral .cur { font-size: .46em; font-stretch: 100%; font-weight: 700; margin-right: .14em; color: var(--ink); letter-spacing: 0; }
 .hero .numeral .cur { font-size: .42em; vertical-align: .9em; }
-.hero-grid { display: grid; grid-template-areas: "head" "chart" "facts"; }
-.h-head { grid-area: head; } .h-chart { grid-area: chart; } .h-facts { grid-area: facts; }
+.hero-grid { display: grid; grid-template-areas: "head" "chart" "facts" "src"; }
+.h-head { grid-area: head; } .h-chart { grid-area: chart; } .h-facts { grid-area: facts; } .h-src { grid-area: src; }
+@media (max-width: 599px) {
+  .hero { padding: 14px 14px 10px; }
+  .hero .numeral { font-size: 50px; margin: 6px 0 6px; }
+  .hero .toolbar { margin: 6px 0 2px; }
+  .hero .facts { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 8px; }
+  .hero .facts div { padding: 6px 8px 6px 0; }
+  .hero .facts dt { font-size: 11.5px; }
+  .hero .facts dd { font-size: 13.5px; white-space: normal; line-height: 1.25; }
+  .hero .src { margin-top: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .hero .guil { width: 240px; height: 240px; right: -80px; top: -70px; }
+  .macro-bed .bed-head { flex-direction: column; align-items: flex-start; gap: 2px; }
+}
 .hero .row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
 .facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; margin: 14px 0 0; border-top: 1px solid color-mix(in oklab, var(--ink) 28%, var(--rule)); }
 .facts div { padding: 9px 0; border-bottom: 1px solid color-mix(in oklab, var(--ink) 18%, var(--rule)); min-width: 0; }
@@ -175,7 +187,7 @@ main { padding: 14px 16px 8px; max-width: 1180px; margin: 0 auto; }
 .asset { margin: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: transform .35s var(--ease), border-color .2s; }
 .asset:hover { border-color: color-mix(in oklab, var(--ink) 60%, var(--rule)); }
 .asset:active { transform: scale(.985); }
-.asset .guil { width: 170px; height: 170px; right: -48px; bottom: -58px; }
+.asset .guil { width: 170px; height: 170px; right: -56px; top: 6px; }
 .asset .name { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px 14px 0; font-weight: 700; font-size: 13.5px; color: var(--ink); }
 .asset .name svg { width: 16px; height: 16px; color: var(--text-2); flex: none; }
 .faces {
@@ -192,13 +204,14 @@ main { padding: 14px 16px 8px; max-width: 1180px; margin: 0 auto; }
 .face .lbl { font-size: 12px; color: var(--text-2); font-weight: 600; }
 .range { position: relative; height: 6px; border-radius: 6px; background: color-mix(in oklab, var(--ink) 22%, var(--surface-2)); margin: 8px 0 2px; }
 .range i { position: absolute; top: 50%; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; background: var(--ink); box-shadow: 0 1px 4px rgba(0,0,0,.45); }
+.face .range { margin-top: 10px; }
 .range-ends { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--text-2); font-variant-numeric: tabular-nums; }
 .mini { height: 36px; margin-top: 2px; }
 .foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 0 14px 10px; }
 .foot .sub { font-size: 12px; }
-.dots { display: inline-flex; gap: 2px; flex: none; }
-.dots button { width: 22px; height: 22px; border: 0; background: transparent; padding: 0; display: grid; place-items: center; cursor: pointer; }
-.dots button::before { content: ""; width: 6px; height: 6px; border-radius: 3px; background: var(--rule-2); transition: width .3s var(--ease), background .3s; }
+.dots { display: inline-flex; gap: 0; flex: none; margin: -12px -8px -10px 0; }
+.dots button { width: 32px; height: 44px; border: 0; background: transparent; padding: 0; display: grid; place-items: center; cursor: pointer; }
+.dots button::before { content: ""; width: 7px; height: 7px; border-radius: 4px; background: var(--muted); transition: width .3s var(--ease), background .3s; }
 .dots button[aria-current="true"]::before { width: 16px; background: var(--ink); }
 
 /* ---------- Juros e inflação ---------- */
@@ -233,7 +246,7 @@ main { padding: 14px 16px 8px; max-width: 1180px; margin: 0 auto; }
 
 .fresh { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; min-width: 0; }
 .fresh::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--muted); flex: none; }
-.fresh.live::before { background: var(--up); box-shadow: 0 0 0 3px color-mix(in oklab, var(--up) 22%, transparent); }
+.fresh.live::before { background: var(--up); }
 .fresh.delayed::before { background: var(--ink-100); }
 .fresh.close::before { background: var(--text-2); }
 .fresh.stale { color: var(--warn); } .fresh.stale::before { background: var(--warn); }
@@ -401,7 +414,7 @@ main { padding: 14px 16px 8px; max-width: 1180px; margin: 0 auto; }
   .toasts { bottom: 24px; }
   main { padding-top: 20px; }
   .hero { padding: 22px 24px 18px; }
-  .hero-grid { grid-template-columns: minmax(0, 420px) minmax(0, 1fr); grid-template-areas: "head chart" "facts chart"; column-gap: 28px; align-items: start; }
+  .hero-grid { grid-template-columns: minmax(0, 420px) minmax(0, 1fr); grid-template-areas: "head chart" "facts chart" "facts src"; column-gap: 28px; align-items: start; }
   .beds { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 10px; }
   .bed[data-span="1"] { grid-column: span 1; } .bed[data-span="2"] { grid-column: span 2; } .bed[data-span="3"] { grid-column: span 3; }
   .bed[data-span="1"] .notes { grid-template-columns: 1fr; }
@@ -409,7 +422,7 @@ main { padding: 14px 16px 8px; max-width: 1180px; margin: 0 auto; }
   .bed[data-span="3"] .notes { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .hero .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .hero .numeral { font-size: 80px; }
-  .hero .guil { width: 480px; height: 480px; right: -140px; top: -170px; }
+  .hero .guil { width: 420px; height: 420px; left: 150px; right: auto; top: -170px; }
   .macro-bed { padding: 18px 20px 12px; }
 }
 @media (prefers-reduced-motion: reduce) {
