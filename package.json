@@ -1,0 +1,12 @@
+{
+  "name": "atlas-invest-lab",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Painel financeiro pessoal (estático, sem build).",
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "data": "node scripts/fetch-market.mjs",
+    "serve": "python3 -m http.server 8080"
+  },
+  "engines": { "node": ">=20" }
+}

@@ -1,0 +1,58 @@
+name: Publicar no GitHub Pages
+
+# Publica o site e gera um snapshot novo de mercado (data/market.json).
+# - a cada push no branch padrão
+# - a cada 15 min em horário de pregão (seg–sex, 12h–22h UTC = 9h–19h de Brasília)
+# - a cada hora fora do pregão
+# - manualmente (Actions → "Publicar no GitHub Pages" → Run workflow)
+on:
+  push:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/15 12-22 * * 1-5"
+    - cron: "7 * * * *"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Testes (indicadores, backtest, diário)
+        run: node --test tests/*.test.js
+
+      - name: Atualizar snapshot de mercado
+        # Se as fontes falharem, mantém o último snapshot do repositório (o site mostra a data dele).
+        run: node scripts/fetch-market.mjs data/market.json || echo "::warning::Snapshot não atualizado; usando o arquivo do repositório."
+
+      - name: Montar site
+        run: |
+          mkdir _site
+          cp -r index.html manifest.webmanifest sw.js .nojekyll assets data _site/
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4

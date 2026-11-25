@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Atlas Invest Lab</title>
+<meta name="description" content="Painel financeiro pessoal: dólar, juros, inflação, bolsas e cripto, com análise técnica, backtest e diário de operações.">
+<meta name="theme-color" content="#0a0e17">
+<meta name="color-scheme" content="dark">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Atlas">
+<meta name="format-detection" content="telephone=no">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/icons/icon-180.png">
+<link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body>
+<a class="skip" href="#main">Pular para o conteúdo</a>
+
+<header class="topbar">
+  <div class="brand">
+    <img src="assets/icons/icon.svg" alt="" width="28" height="28">
+    <div><strong>Atlas</strong><span>Invest Lab</span></div>
+  </div>
+  <button id="status" class="status" type="button" aria-label="Situação das fontes de dados">
+    <span class="dot"></span><span id="status-text">Carregando…</span>
+  </button>
+  <div class="top-actions">
+    <button id="btn-refresh" class="icon-btn" type="button" aria-label="Atualizar dados" title="Atualizar">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.34-5.66M20 4v5h-5"/></svg>
+    </button>
+    <button id="btn-settings" class="icon-btn" type="button" aria-label="Configurações" title="Configurações">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+    </button>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="Seções">
+  <a href="#painel" data-view="painel"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>Painel</span></a>
+  <a href="#analise" data-view="analise"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20h18M5 16l4-5 4 3 6-8"/></svg><span>Análise</span></a>
+  <a href="#backtest" data-view="backtest"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8v4l3 2"/><path d="M3.05 11a9 9 0 1 1 .5 4M3 4v5h5"/></svg><span>Backtest</span></a>
+  <a href="#diario" data-view="diario"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h12a2 2 0 0 1 2 2v14H6a2 2 0 0 1-2-2z"/><path d="M8 8h6M8 12h6M8 16h3M18 6h2v14"/></svg><span>Diário</span></a>
+</nav>
+
+<main id="main">
+  <!-- ================= PAINEL ================= -->
+  <section id="view-painel" class="view" aria-labelledby="h-painel">
+    <h1 id="h-painel" class="sr-only">Painel de mercado</h1>
+
+    <article class="card hero" id="usd-hero" aria-live="polite">
+      <div class="skeleton tall"></div>
+    </article>
+
+    <h2 class="section-title">Juros e inflação <small>Banco Central do Brasil</small></h2>
+    <div class="grid macro" id="macro"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div>
+    <div class="card" id="macro-chart-card">
+      <div class="card-head"><h3>Selic × IPCA 12 meses</h3><span class="muted small" id="macro-chart-note"></span></div>
+      <div id="macro-chart" class="chart-box" style="height:200px"></div>
+    </div>
+
+    <h2 class="section-title">Moedas</h2>
+    <div class="grid assets" id="g-fx"></div>
+    <h2 class="section-title">Bolsa brasileira</h2>
+    <div class="grid assets" id="g-br"></div>
+    <h2 class="section-title">Mercado internacional</h2>
+    <div class="grid assets" id="g-world"></div>
+    <h2 class="section-title">Criptomoedas</h2>
+    <div class="grid assets" id="g-crypto"></div>
+  </section>
+
+  <!-- ================= ANÁLISE ================= -->
+  <section id="view-analise" class="view" hidden aria-labelledby="h-analise">
+    <h1 id="h-analise" class="view-title">Análise técnica</h1>
+    <div class="chips scroll" id="an-assets" role="tablist" aria-label="Ativo"></div>
+    <article class="card">
+      <div class="an-head" id="an-head"></div>
+      <div class="toolbar">
+        <div class="chips" id="an-range" role="group" aria-label="Período">
+          <button type="button" data-r="21">1M</button><button type="button" data-r="63">3M</button><button type="button" data-r="126" class="on">6M</button><button type="button" data-r="252">1A</button><button type="button" data-r="9999">2A</button>
+        </div>
+        <div class="toggles">
+          <label><input type="checkbox" id="an-ema9" checked><span class="sw c-ema9"></span>EMA 9</label>
+          <label><input type="checkbox" id="an-ema21" checked><span class="sw c-ema21"></span>EMA 21</label>
+        </div>
+      </div>
+      <div id="an-chart" class="chart-box" style="height:280px"></div>
+      <div class="sub-label">RSI 14</div>
+      <div id="an-rsi" class="chart-box" style="height:110px"></div>
+      <p class="muted small" id="an-source"></p>
+    </article>
+    <div class="grid stats" id="an-stats"></div>
+    <article class="card" id="an-reading"></article>
+  </section>
+
+  <!-- ================= BACKTEST ================= -->
+  <section id="view-backtest" class="view" hidden aria-labelledby="h-bt">
+    <h1 id="h-bt" class="view-title">Backtest <small>EMA 9 × EMA 21 com filtro de RSI</small></h1>
+    <form class="card form" id="bt-form" novalidate>
+      <div class="fields">
+        <label>Ativo<select id="bt-asset"></select></label>
+        <label>Período<select id="bt-period"><option value="252">Último ano</option><option value="504" selected>Últimos 2 anos</option><option value="0">Todo o histórico</option></select></label>
+        <label>Capital inicial (R$ ou US$)<input id="bt-capital" inputmode="decimal" autocomplete="off" value="10.000"></label>
+        <label>Taxa por operação (%)<input id="bt-fee" inputmode="decimal" autocomplete="off" value="0,10"></label>
+        <label>Slippage (%)<input id="bt-slip" inputmode="decimal" autocomplete="off" value="0,05"></label>
+        <label>Entrar só com RSI ≤<input id="bt-rsimax" inputmode="decimal" autocomplete="off" value="70"></label>
+      </div>
+      <details class="adv">
+        <summary>Parâmetros avançados</summary>
+        <div class="fields">
+          <label>EMA rápida<input id="bt-fast" inputmode="numeric" value="9"></label>
+          <label>EMA lenta<input id="bt-slow" inputmode="numeric" value="21"></label>
+          <label>Entrar só com RSI ≥<input id="bt-rsimin" inputmode="decimal" value="0"></label>
+          <label>Sair se RSI ≥ (0 = desligado)<input id="bt-rsiexit" inputmode="decimal" value="0"></label>
+        </div>
+      </details>
+      <div class="form-actions"><button class="btn primary" type="submit">Simular</button></div>
+      <p class="form-error" id="bt-error" role="alert" hidden></p>
+    </form>
+    <div id="bt-results" hidden>
+      <div class="notice">Simulação histórica com dados diários. Resultados passados não garantem resultados futuros e não são recomendação de investimento.</div>
+      <div class="grid stats" id="bt-kpis"></div>
+      <article class="card"><div class="card-head"><h3>Patrimônio: estratégia × buy and hold</h3></div><div id="bt-equity" class="chart-box" style="height:240px"></div></article>
+      <article class="card"><div class="card-head"><h3>Preço e operações</h3><span class="muted small">▲ compra · ▼ venda</span></div><div id="bt-price" class="chart-box" style="height:240px"></div></article>
+      <article class="card"><div class="card-head"><h3>Operações</h3><span class="muted small" id="bt-trades-note"></span></div><div class="table-wrap"><table class="table" id="bt-trades"></table></div></article>
+      <details class="card method">
+        <summary>Como a simulação funciona</summary>
+        <ul>
+          <li>Sinais calculados com o <b>fechamento</b> de cada dia; a ordem é executada na <b>abertura do dia seguinte</b>. Não há uso de informação futura.</li>
+          <li><b>Compra</b> quando a EMA rápida cruza acima da lenta e o RSI(14) está dentro da faixa escolhida. <b>Venda</b> no cruzamento contrário (ou pelo RSI de saída, se ativado).</li>
+          <li>Só compra (sem venda a descoberto), uma posição por vez, todo o capital. Depois de vender, só volta a comprar após um <b>novo</b> cruzamento de alta.</li>
+          <li>Taxa cobrada na entrada e na saída sobre o valor financeiro; slippage piora o preço de cada execução.</li>
+          <li>Drawdown máximo calculado sobre o patrimônio marcado a mercado no fechamento diário.</li>
+          <li>Posição aberta no fim é avaliada pelo último fechamento, já descontando os custos de saída.</li>
+          <li>Buy and hold começa no mesmo dia e paga os mesmos custos.</li>
+          <li>O candle do dia em andamento (mercado aberto) é descartado para não usar preço incompleto.</li>
+        </ul>
+      </details>
+    </div>
+  </section>
+
+  <!-- ================= DIÁRIO ================= -->
+  <section id="view-diario" class="view" hidden aria-labelledby="h-diario">
+    <h1 id="h-diario" class="view-title">Diário de operações</h1>
+    <div class="grid stats" id="j-stats"></div>
+    <div class="actions-bar">
+      <button class="btn primary" type="button" id="j-new">+ Nova operação</button>
+      <button class="btn" type="button" id="j-csv">Exportar CSV</button>
+      <button class="btn" type="button" id="j-backup">Backup JSON</button>
+      <label class="btn file-btn">Restaurar backup<input type="file" id="j-restore" accept="application/json,.json"></label>
+    </div>
+
+    <form class="card form" id="j-form" hidden novalidate>
+      <div class="card-head"><h3 id="j-form-title">Nova operação</h3></div>
+      <input type="hidden" id="j-id">
+      <div class="fields">
+        <label>Ativo<input id="j-asset" list="j-asset-list" autocomplete="off" autocapitalize="characters" placeholder="Ex.: USDBRL, PETR4, BTC" required></label>
+        <label>Direção<select id="j-side"><option value="long">Compra (long)</option><option value="short">Venda (short)</option></select></label>
+        <label>Data de entrada<input id="j-date" type="date" required></label>
+        <label>Preço de entrada<input id="j-entry" inputmode="decimal" autocomplete="off" required></label>
+        <label>Quantidade<input id="j-qty" inputmode="decimal" autocomplete="off" required></label>
+        <label>Moeda<select id="j-currency"><option value="BRL">Real (R$)</option><option value="USD">Dólar (US$)</option></select></label>
+        <label>Data de saída <small>(opcional)</small><input id="j-exitdate" type="date"></label>
+        <label>Preço de saída <small>(vazio = aberta)</small><input id="j-exit" inputmode="decimal" autocomplete="off"></label>
+        <label>Taxas e custos<input id="j-fees" inputmode="decimal" autocomplete="off" value="0"></label>
+        <label>Setup / estratégia<input id="j-setup" autocomplete="off" placeholder="Ex.: cruzamento EMA"></label>
+        <label class="wide">Observações<textarea id="j-notes" rows="2"></textarea></label>
+      </div>
+      <p class="muted small" id="j-preview"></p>
+      <p class="form-error" id="j-error" role="alert" hidden></p>
+      <div class="form-actions">
+        <button class="btn" type="button" id="j-cancel">Cancelar</button>
+        <button class="btn primary" type="submit">Salvar</button>
+      </div>
+    </form>
+    <datalist id="j-asset-list"></datalist>
+
+    <div class="toolbar">
+      <div class="chips" id="j-filter" role="group" aria-label="Filtrar">
+        <button type="button" data-f="all" class="on">Todas</button><button type="button" data-f="open">Abertas</button><button type="button" data-f="closed">Encerradas</button>
+      </div>
+      <input type="search" id="j-search" placeholder="Buscar ativo ou setup" aria-label="Buscar">
+    </div>
+    <div id="j-list" class="j-list"></div>
+  </section>
+</main>
+
+<footer class="footer">
+  <p>Ferramenta de acompanhamento e estudo. Não executa ordens, não se conecta a corretoras e não é recomendação de investimento. Sinais técnicos não garantem resultado; investimentos envolvem risco de perda.</p>
+  <p class="muted">Dados: Banco Central do Brasil, AwesomeAPI, Binance, CoinGecko e Yahoo Finance. Cotações podem ter atraso; o horário de cada uma é informado.</p>
+</footer>
+
+<div id="toasts" class="toasts" aria-live="polite"></div>
+
+<dialog id="dialog" class="dialog">
+  <h3 id="dialog-title"></h3>
+  <p id="dialog-text"></p>
+  <div class="dialog-actions" id="dialog-actions"></div>
+</dialog>
+
+<dialog id="sources" class="dialog wide">
+  <div class="card-head"><h3>Fontes de dados</h3><button class="icon-btn" type="button" data-close aria-label="Fechar">✕</button></div>
+  <div id="sources-body"></div>
+  <p class="muted small">Quando uma fonte falha, o painel mostra o último dado válido salvo neste aparelho, com o horário original. Índices de bolsa vêm de um arquivo atualizado periodicamente pelo servidor (GitHub Actions), por isso podem ter alguns minutos de atraso.</p>
+</dialog>
+
+<dialog id="settings" class="dialog wide">
+  <div class="card-head"><h3>Configurações</h3><button class="icon-btn" type="button" data-close aria-label="Fechar">✕</button></div>
+  <form id="settings-form" class="form" method="dialog">
+    <div class="fields">
+      <label>Atualização automática
+        <select id="set-refresh"><option value="30">A cada 30 s</option><option value="60">A cada 1 min</option><option value="120">A cada 2 min</option><option value="300">A cada 5 min</option><option value="0">Desligada</option></select>
+      </label>
+      <label class="wide">Chave da AwesomeAPI <small>(opcional)</small>
+        <input id="set-token" autocomplete="off" spellcheck="false" placeholder="Deixe vazio para usar o acesso gratuito">
+      </label>
+    </div>
+    <p class="muted small">A chave fica salva só neste aparelho e é enviada apenas para economia.awesomeapi.com.br. Ela aumenta o limite de consultas de câmbio. Sem chave, se o limite gratuito acabar, o painel usa a cotação do servidor (Yahoo) ou a PTAX do Banco Central.</p>
+    <div class="form-actions">
+      <button class="btn" type="button" id="set-clear">Limpar cache de cotações</button>
+      <button class="btn primary" type="submit" id="set-save">Salvar</button>
+    </div>
+  </form>
+  <p class="muted small">Seu diário fica salvo apenas neste navegador. Faça backups periódicos em JSON (aba Diário).</p>
+  <p class="muted small" id="app-version"></p>
+</dialog>
+
+<script src="assets/js/core.js"></script>
+<script src="assets/js/indicators.js"></script>
+<script src="assets/js/backtest.js"></script>
+<script src="assets/js/journal.js"></script>
+<script src="assets/js/chart.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
