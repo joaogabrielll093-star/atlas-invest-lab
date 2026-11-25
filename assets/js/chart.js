@@ -171,5 +171,28 @@
     charts.forEach((c) => (c.linked = charts.filter((o) => o !== c)));
   }
 
-  Atlas.chart = { line, spark, link };
+  /**
+   * Guilhoché: rosácea de linhas finas como as das cédulas (geometria pura, sem imagem).
+   * `seed` muda as frequências para cada cédula ter o seu desenho.
+   */
+  const guilCache = {};
+  function guilloche(seed = 1, className = 'guil') {
+    if (!guilCache[seed]) {
+      const k = 7 + (seed % 5), k2 = 3 + (seed % 3), curves = 14, steps = 360;
+      let d = '';
+      for (let j = 0; j < curves; j++) {
+        const ph = (j / curves) * Math.PI * 2 / k;
+        const r0 = 34 + j * 2.4;
+        for (let s = 0; s <= steps; s++) {
+          const t = (s / steps) * Math.PI * 2;
+          const r = r0 + 9 * Math.sin(k * t + ph) + 4 * Math.sin(k2 * t - ph * 2);
+          d += (s ? 'L' : 'M') + (100 + r * Math.cos(t)).toFixed(1) + ',' + (100 + r * Math.sin(t)).toFixed(1);
+        }
+      }
+      guilCache[seed] = d;
+    }
+    return `<svg class="${className}" viewBox="0 0 200 200" aria-hidden="true" focusable="false"><path d="${guilCache[seed]}"/></svg>`;
+  }
+
+  Atlas.chart = { line, spark, link, guilloche };
 })(typeof self !== 'undefined' ? self : this);

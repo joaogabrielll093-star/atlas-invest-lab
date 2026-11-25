@@ -1,13 +1,13 @@
 /* ATLAS INVEST LAB — service worker.
  * Estratégia "rede primeiro": sempre tenta buscar a versão mais nova e só usa a cópia
  * local quando está sem conexão. Requisições para APIs externas não são interceptadas. */
-const CACHE = 'atlas-v2.0.0';
+const CACHE = 'atlas-v2.1.0';
 const SHELL = [
   './', 'index.html', 'manifest.webmanifest',
   'assets/css/app.css',
   'assets/js/core.js', 'assets/js/indicators.js', 'assets/js/backtest.js', 'assets/js/journal.js',
   'assets/js/chart.js', 'assets/js/data.js', 'assets/js/app.js',
-  'assets/icons/icon.svg', 'assets/icons/icon-180.png', 'assets/icons/icon-192.png',
+  'assets/icons/icon.svg', 'assets/icons/icon-180.png', 'assets/icons/icon-192.png', 'assets/fonts/archivo-var.woff2',
 ];
 
 self.addEventListener('install', (e) => {

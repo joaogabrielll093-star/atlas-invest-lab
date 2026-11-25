@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Atlas Invest Lab</title>
 <meta name="description" content="Painel financeiro pessoal: dólar, juros, inflação, bolsas e cripto, com análise técnica, backtest e diário de operações.">
-<meta name="theme-color" content="#0a0e17">
+<meta name="theme-color" content="#0b1020">
 <meta name="color-scheme" content="dark">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -15,10 +15,19 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/icons/icon-180.png">
+<link rel="preload" href="assets/fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/css/app.css">
 </head>
 <body>
 <a class="skip" href="#main">Pular para o conteúdo</a>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-up" viewBox="0 0 10 10"><path d="M5 1.5 9 8.5H1z"/></symbol>
+    <symbol id="i-down" viewBox="0 0 10 10"><path d="M5 8.5 1 1.5h8z"/></symbol>
+    <symbol id="i-flat" viewBox="0 0 10 10"><rect x="1.5" y="4" width="7" height="2" rx="1"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
 
 <header class="topbar">
   <div class="brand">
@@ -50,25 +59,35 @@
   <section id="view-painel" class="view" aria-labelledby="h-painel">
     <h1 id="h-painel" class="sr-only">Painel de mercado</h1>
 
-    <article class="card hero" id="usd-hero" aria-live="polite">
+    <article class="note hero" id="usd-hero" data-ink="100" aria-live="polite">
       <div class="skeleton tall"></div>
     </article>
 
-    <h2 class="section-title">Juros e inflação <small>Banco Central do Brasil</small></h2>
-    <div class="grid macro" id="macro"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div>
-    <div class="card" id="macro-chart-card">
-      <div class="card-head"><h3>Selic × IPCA 12 meses</h3><span class="muted small" id="macro-chart-note"></span></div>
-      <div id="macro-chart" class="chart-box" style="height:200px"></div>
+    <div class="period-bar">
+      <div class="seg" id="period" role="group" aria-label="Período das cédulas">
+        <button type="button" data-face="0" aria-pressed="true">Hoje</button>
+        <button type="button" data-face="1" aria-pressed="false">1 mês</button>
+        <button type="button" data-face="2" aria-pressed="false">12 meses</button>
+      </div>
+    </div>
+    <p class="hint">Deslize uma cédula para o lado para virar só ela.</p>
+
+
+    <div class="beds">
+      <section class="bed" data-ink="2" data-span="2" aria-labelledby="h-fx"><div class="bed-head"><h2 id="h-fx">Moedas</h2></div><div class="notes" id="g-fx"></div></section>
+      <section class="bed" data-ink="10" data-span="2" aria-labelledby="h-crypto"><div class="bed-head"><h2 id="h-crypto">Criptomoedas</h2></div><div class="notes" id="g-crypto"></div></section>
+      <section class="bed" data-ink="20" data-span="1" aria-labelledby="h-br"><div class="bed-head"><h2 id="h-br">Bolsa brasileira</h2></div><div class="notes" id="g-br"></div></section>
+      <section class="bed" data-ink="50" data-span="3" aria-labelledby="h-world"><div class="bed-head"><h2 id="h-world">Mercado internacional</h2></div><div class="notes" id="g-world"></div></section>
     </div>
 
-    <h2 class="section-title">Moedas</h2>
-    <div class="grid assets" id="g-fx"></div>
-    <h2 class="section-title">Bolsa brasileira</h2>
-    <div class="grid assets" id="g-br"></div>
-    <h2 class="section-title">Mercado internacional</h2>
-    <div class="grid assets" id="g-world"></div>
-    <h2 class="section-title">Criptomoedas</h2>
-    <div class="grid assets" id="g-crypto"></div>
+    <section class="bed macro-bed" data-ink="5" aria-labelledby="h-macro">
+      <div class="bed-head"><h2 id="h-macro">Juros e inflação</h2><span class="src" id="macro-chart-note">Banco Central do Brasil</span></div>
+      <div class="macro" id="macro"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div>
+      <div class="macro-chart-wrap">
+        <h3>Selic × IPCA 12 meses</h3>
+        <div id="macro-chart" class="chart-box" style="height:190px"></div>
+      </div>
+    </section>
   </section>
 
   <!-- ================= ANÁLISE ================= -->
@@ -122,9 +141,9 @@
     <div id="bt-results" hidden>
       <div class="notice">Simulação histórica com dados diários. Resultados passados não garantem resultados futuros e não são recomendação de investimento.</div>
       <div class="grid stats" id="bt-kpis"></div>
-      <article class="card"><div class="card-head"><h3>Patrimônio: estratégia × buy and hold</h3></div><div id="bt-equity" class="chart-box" style="height:240px"></div></article>
-      <article class="card"><div class="card-head"><h3>Preço e operações</h3><span class="muted small">▲ compra · ▼ venda</span></div><div id="bt-price" class="chart-box" style="height:240px"></div></article>
-      <article class="card"><div class="card-head"><h3>Operações</h3><span class="muted small" id="bt-trades-note"></span></div><div class="table-wrap"><table class="table" id="bt-trades"></table></div></article>
+      <article class="card"><div class="card-head"><h2>Patrimônio: estratégia × buy and hold</h2></div><div id="bt-equity" class="chart-box" style="height:240px"></div></article>
+      <article class="card"><div class="card-head"><h2>Preço e operações</h2><span class="muted small">▲ compra · ▼ venda</span></div><div id="bt-price" class="chart-box" style="height:240px"></div></article>
+      <article class="card"><div class="card-head"><h2>Operações</h2><span class="muted small" id="bt-trades-note"></span></div><div class="table-wrap"><table class="table" id="bt-trades"></table></div></article>
       <details class="card method">
         <summary>Como a simulação funciona</summary>
         <ul>
@@ -153,7 +172,7 @@
     </div>
 
     <form class="card form" id="j-form" hidden novalidate>
-      <div class="card-head"><h3 id="j-form-title">Nova operação</h3></div>
+      <div class="card-head"><h2 id="j-form-title">Nova operação</h2></div>
       <input type="hidden" id="j-id">
       <div class="fields">
         <label>Ativo<input id="j-asset" list="j-asset-list" autocomplete="off" autocapitalize="characters" placeholder="Ex.: USDBRL, PETR4, BTC" required></label>

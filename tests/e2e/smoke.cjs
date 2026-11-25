@@ -42,15 +42,35 @@ async function waitLoaded(page) {
   await waitLoaded(page);
   const heroPrice = await page.textContent('#usd-hero .big');
   check('1. Painel abre e mostra o dólar', /R\$\s*\d/.test(heroPrice || ''), heroPrice);
-  const cards = await page.$$eval('.card.asset', (els) => els.map((e) => e.querySelector('.px').textContent.trim()));
+  const cards = await page.$$eval('.asset', (els) => els.map((e) => e.querySelector('.px').textContent.trim()));
   check('1. Cartões de ativos com cotação', cards.length === 8 && cards.every((t) => /\d/.test(t)), cards.join(' | '));
-  const macro = await page.$$eval('#macro .card', (els) => els.map((e) => e.textContent.replace(/\s+/g, ' ').trim()));
+  const macro = await page.$$eval('#macro .m', (els) => els.map((e) => e.textContent.replace(/\s+/g, ' ').trim()));
   check('1. Selic, CDI e IPCA exibidos', macro.length >= 4, macro.join(' | '));
   const sources = await page.evaluate(() => Object.fromEntries(Object.entries(Atlas.data.SOURCES).map(([k, s]) => [k, s.ok === null ? 'não consultada' : s.ok ? 'ok' : 'falha: ' + s.error])));
   console.log('      fontes:', JSON.stringify(sources));
   const fresh = await page.$$eval('.fresh', (els) => els.map((e) => e.textContent));
   check('1. Cada cotação tem selo de horário/tipo', fresh.length >= 9 && fresh.every((t) => /(Ao vivo|Atraso|Com atraso|Fechamento|PTAX|Desatualizado|Último dado)/.test(t)), fresh.slice(0, 4).join(' | '));
   await shot(page, 'desktop-painel');
+
+  // 1b. Cédulas: virar todas pelo seletor, uma pelos pontos e uma arrastando
+  const faceOfCard = (sel) => page.$eval(sel + ' .faces', (f) => Math.round(f.scrollLeft / f.clientWidth));
+  await page.click('#period button[data-face="2"]');
+  await page.waitForTimeout(900);
+  const all12 = await page.$$eval('#view-painel .asset .faces', (fs) => fs.every((f) => Math.round(f.scrollLeft / f.clientWidth) === 2));
+  check('1b. Seletor "12 meses" vira todas as cédulas', all12);
+  await page.click('.asset[data-asset="EURBRL"] .dots button[data-face="1"]');
+  await page.waitForTimeout(700);
+  check('1b. Pontos viram só a cédula escolhida', (await faceOfCard('.asset[data-asset="EURBRL"]')) === 1 && (await faceOfCard('.asset[data-asset="GBPBRL"]')) === 2);
+  const fb = await (await page.$('.asset[data-asset="BTC"] .faces')).boundingBox();
+  await page.mouse.move(fb.x + fb.width * 0.3, fb.y + 40);
+  await page.mouse.down();
+  await page.mouse.move(fb.x + fb.width * 0.9, fb.y + 40, { steps: 8 });
+  await page.mouse.up();
+  await page.waitForTimeout(700);
+  check('1b. Arrastar a cédula para o lado vira a face', (await faceOfCard('.asset[data-asset="BTC"]')) === 1);
+  check('1b. Arrastar não abre a análise por engano', await page.isVisible('#view-painel'));
+  await page.click('#period button[data-face="0"]');
+  await page.waitForTimeout(600);
 
   // 2. Atualização
   const before = await page.evaluate(() => Atlas.data.SOURCES.bcb.at);
@@ -63,6 +83,8 @@ async function waitLoaded(page) {
   // 3. Gráficos
   const svgs = await page.$$eval('#hero-chart svg path.series, #macro-chart svg path.series', (e) => e.length);
   check('3. Gráficos do painel desenhados', svgs >= 3, `${svgs} séries`);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.waitForTimeout(200);
   const box = await page.$('#hero-chart svg');
   const bb = await box.boundingBox();
   await page.mouse.move(bb.x + bb.width * 0.6, bb.y + bb.height / 2);
@@ -175,7 +197,7 @@ async function waitLoaded(page) {
     const over = await mp.evaluate(() => {
       const w = document.documentElement.clientWidth;
       const bad = [...document.querySelectorAll('body *')].filter((el) => {
-        if (el.closest('.table-wrap, .chips.scroll, dialog')) return false;
+        if (el.closest('.table-wrap, .chips.scroll, dialog, .guil, .faces')) return false; // guilhoché é decorativo e recortado pela cédula; faces viram por rolagem lateral
         const r = el.getBoundingClientRect();
         return r.width > 0 && (r.right > w + 1 || r.left < -1);
       }).map((el) => el.tagName + '.' + el.className).slice(0, 5);

@@ -8,10 +8,10 @@
   const BT = window.AtlasBacktest;
   const { $, $$, esc, toast } = dom;
 
-  const VERSION = '2.0.0';
+  const VERSION = '2.1.0';
   const SETTINGS_KEY = 'atlas.settings.v1';
   const settings = Object.assign({ refreshSec: 60, token: '' }, store.get(SETTINGS_KEY, {}));
-  const ui = Object.assign({ heroRange: 63, anKey: 'USDBRL', anRange: 126, ema9: true, ema21: true, btAsset: 'USDBRL' }, store.get('atlas.ui.v1', {}));
+  const ui = Object.assign({ heroRange: 63, period: 0, anKey: 'USDBRL', anRange: 126, ema9: true, ema21: true, btAsset: 'USDBRL' }, store.get('atlas.ui.v1', {}));
   const saveUI = () => store.set('atlas.ui.v1', ui);
 
   let M = data.model();
@@ -26,7 +26,20 @@
     if (a.unit === 'BRL') return fmt.money(v, 'BRL', 4);
     return fmt.money(v, a.unit, 2);
   }
-  const badge = (v, suffix = '') => `<span class="badge ${fmt.signClass(v)}">${v > 0 ? '▲' : v < 0 ? '▼' : '■'} ${fmt.pct(v, 2, false).replace('−', '')}${suffix}</span>`;
+  const icon = (v) => `<svg aria-hidden="true"><use href="#i-${v > 0 ? 'up' : v < 0 ? 'down' : 'flat'}"/></svg>`;
+  const badge = (v, suffix = '') => `<span class="badge ${fmt.signClass(v)}">${icon(v)}${fmt.pct(v, 2, false).replace('−', '')}${suffix}</span>`;
+  // Cada grupo de mercado usa a tinta de uma cédula do Real.
+  const INK = { USDBRL: '100', fx: '2', br: '20', world: '50', crypto: '10' };
+  const INK_HEX = { 100: '#3dbfa8', 5: '#b07cf0', 2: '#7fa6cc', 20: '#f4c23a', 50: '#f08a3e', 10: '#e463b6' };
+  const inkOf = (a) => INK[a.key] || INK[a.group];
+  const seedOf = (k) => [...k].reduce((s, c) => s + c.charCodeAt(0), 0);
+  // Numeral de cédula: separa o símbolo da moeda para compor o valor como na nota.
+  function numeral(a, v) {
+    if (v == null || !Number.isFinite(v)) return '—';
+    if (a.unit === 'pts') return fmt.num(v, v >= 100000 ? 0 : 2);
+    const cur = a.unit === 'BRL' ? 'R$' : 'US$';
+    return `<span class="cur">${cur}</span>${fmt.num(v, a.unit === 'BRL' ? 4 : 2)}`;
+  }
   const freshTag = (f) => `<span class="fresh ${f.level}" title="${esc(f.label)}">${esc(f.label)}</span>`;
   const closes = (a) => a.candles.map((c) => c.close);
   function chgOver(a, n) { return ind.changeOver(closes(a), n); }
@@ -80,6 +93,8 @@
 
   // ------------------------------------------------------------------ painel
   function renderDashboard() {
+    const bed = $('.macro-bed');
+    if (bed && !$('.guil', bed)) bed.insertAdjacentHTML('afterbegin', chart.guilloche(5));
     renderHero();
     renderMacro();
     const groups = { fx: '#g-fx', br: '#g-br', world: '#g-world', crypto: '#g-crypto' };
@@ -87,62 +102,154 @@
       const list = Object.values(M.assets).filter((a) => a.group === g && a.key !== 'USDBRL');
       $(sel).innerHTML = list.map(assetCard).join('');
     }
+    $$('#period button').forEach((b) => b.setAttribute('aria-pressed', String(+b.dataset.face === ui.period)));
+    requestAnimationFrame(() => applyFaces(false));
   }
 
+  const FACES = ['Hoje', '1 mês', '12 meses'];
+  /** Cédula de um ativo com três faces (hoje, 1 mês, 12 meses), viradas por arrasto ou pelo seletor. */
   function assetCard(a) {
     const q = a.quote;
+    const ink = inkOf(a);
+    const dec = a.unit === 'BRL' ? 4 : a.unit === 'pts' && (a.quote && a.quote.price >= 100000) ? 0 : 2;
+    const cl = closes(a);
+    const open = `<article class="note asset" data-ink="${ink}" data-asset="${a.key}" aria-label="${esc(a.name)}">${chart.guilloche(seedOf(a.key))}
+      <div class="name"><span>${esc(a.name)}</span><svg aria-hidden="true"><use href="#i-chev"/></svg></div>`;
     if (!q) {
-      return `<button type="button" class="card asset" data-asset="${a.key}" aria-label="${esc(a.name)}: indisponível">
-        <div class="name">${esc(a.name)}</div><div></div>
-        <div class="px unavailable">${loading ? 'Carregando…' : 'Indisponível'}</div><div></div>
-        <div class="meta">${freshTag(a.fresh)}</div></button>`;
+      return `${open}<div class="faces"><div class="face"><div class="numeral px unavailable">${loading ? 'Carregando…' : 'Cotação indisponível'}</div>${freshTag(a.fresh)}</div></div></article>`;
     }
-    const sp = a.candles.length ? chart.spark(closes(a).slice(-63)) : '';
-    const extra = a.priceBRL ? `<span class="num">≈ ${fmt.money(a.priceBRL, 'BRL', 0)}</span>` : (q.changeLabel ? '' : '');
-    return `<button type="button" class="card asset" data-asset="${a.key}" aria-label="${esc(a.name)} ${px(a, q.price)}, variação ${fmt.pct(q.changePct)}">
-      <div class="name">${esc(a.name)}</div>
-      <div class="chg">${badge(q.changePct, q.changeLabel ? ` <small>${q.changeLabel}</small>` : '')}</div>
-      <div class="px">${px(a, q.price)}</div>
-      <div class="spark-wrap">${sp}</div>
-      <div class="meta">${freshTag(a.fresh)}${extra}</div>
-    </button>`;
+    // Face 1: cotação do dia
+    const brl = a.priceBRL ? `<span class="sub">≈ ${fmt.money(a.priceBRL, 'BRL', 0)}</span>` : '';
+    const f1 = `<section class="face" aria-label="Hoje">
+        <div class="numeral px">${numeral(a, q.price)}</div>
+        <div class="line">${badge(q.changePct, q.changeLabel ? ` <small>${q.changeLabel}</small>` : '')}${brl}</div>
+        ${freshTag(a.fresh)}
+      </section>`;
+    // Face 2: último mês
+    const m = cl.slice(-22);
+    const ch1 = chgOver(a, 21);
+    const f2 = m.length > 2 ? `<section class="face" aria-label="1 mês">
+        <div class="line"><span class="lbl">Variação em 1 mês</span><span class="sub">${fmt.shortDate(a.candles[a.candles.length - m.length].date)} → hoje</span></div>
+        <div class="numeral px ${fmt.signClass(ch1)}">${fmt.pct(ch1)}</div>
+        <div class="mini">${chart.spark(m, { width: 240, height: 36 })}</div>
+        <div class="range-ends"><span>mín. ${fmt.num(Math.min(...m), dec)}</span><span>máx. ${fmt.num(Math.max(...m), dec)}</span></div>
+      </section>` : `<section class="face"><p class="empty">Sem histórico</p></section>`;
+    // Face 3: 12 meses e posição na faixa de 52 semanas
+    const ch12 = chgOver(a, 252);
+    const lo = a.low52 ?? (cl.length ? Math.min(...cl.slice(-252)) : null);
+    const hi = a.high52 ?? (cl.length ? Math.max(...cl.slice(-252)) : null);
+    const pos = lo != null && hi > lo ? Math.max(0, Math.min(100, ((q.price - lo) / (hi - lo)) * 100)) : null;
+    const f3 = `<section class="face" aria-label="12 meses">
+        <div class="line"><span class="lbl">Variação em 12 meses</span></div>
+        <div class="numeral px ${fmt.signClass(ch12)}">${fmt.pct(ch12)}</div>
+        ${pos != null ? `<div class="range" role="img" aria-label="Preço atual a ${Math.round(pos)}% entre a mínima e a máxima de 52 semanas"><i style="left:${pos.toFixed(1)}%"></i></div>
+        <div class="range-ends"><span>mín. 52 sem. ${fmt.num(lo, dec)}</span><span>máx. ${fmt.num(hi, dec)}</span></div>` : ''}
+      </section>`;
+    const dots = FACES.map((l, i) => `<button type="button" data-face="${i}" aria-label="${l}" aria-current="${i === 0}"></button>`).join('');
+    return `${open}<div class="faces" tabindex="0" aria-label="Deslize para ver hoje, 1 mês e 12 meses">${f1}${f2}${f3}</div>
+      <div class="foot"><span class="sub">${esc(q.source)}</span><span class="dots" role="group" aria-label="Face da cédula">${dots}</span></div></article>`;
+  }
+
+  // ---- Virar cédulas: arrasto (dedo ou mouse), pontos e seletor global ----
+  const faceOf = {}; // face escolhida em cada cédula (sobrevive às atualizações)
+  function faceIndex(el) { return Math.round(el.scrollLeft / Math.max(1, el.clientWidth)); }
+  function setDots(card, i) { $$('.dots button', card).forEach((b, j) => b.setAttribute('aria-current', String(i === j))); }
+  function flip(card, i, smooth = true) {
+    const faces = $('.faces', card);
+    if (!faces) return;
+    faces.scrollTo({ left: i * faces.clientWidth, behavior: smooth && !matchMedia('(prefers-reduced-motion: reduce)').matches ? 'smooth' : 'auto' });
+    setDots(card, i);
+    faceOf[card.dataset.asset] = i;
+  }
+  function applyFaces(smooth) {
+    $$('#view-painel .asset').forEach((c) => flip(c, faceOf[c.dataset.asset] ?? ui.period, smooth));
+  }
+  function setPeriod(i) {
+    ui.period = i; saveUI();
+    $$('#period button').forEach((b) => b.setAttribute('aria-pressed', String(+b.dataset.face === i)));
+    for (const k of Object.keys(faceOf)) delete faceOf[k];
+    applyFaces(true);
+  }
+  function bindFaces() {
+    const root = $('#view-painel');
+    let drag = null, moved = false;
+    root.addEventListener('scroll', (e) => {
+      const f = e.target;
+      if (!f.classList || !f.classList.contains('faces')) return;
+      clearTimeout(f._t);
+      f._t = setTimeout(() => { const card = f.closest('.asset'); const i = faceIndex(f); setDots(card, i); faceOf[card.dataset.asset] = i; }, 90);
+    }, true);
+    // Mouse: arrastar para o lado (no toque o próprio navegador rola com snap).
+    root.addEventListener('pointerdown', (e) => {
+      moved = false;
+      const f = e.target.closest('.faces');
+      if (!f || e.pointerType !== 'mouse') return;
+      drag = { f, x: e.clientX, left: f.scrollLeft };
+      f.classList.add('dragging');
+    });
+    window.addEventListener('pointermove', (e) => {
+      if (!drag) return;
+      const dx = e.clientX - drag.x;
+      if (Math.abs(dx) > 6) moved = true;
+      drag.f.scrollLeft = drag.left - dx;
+    });
+    window.addEventListener('pointerup', () => {
+      if (!drag) return;
+      const { f, left } = drag; drag = null;
+      f.classList.remove('dragging');
+      const w = f.clientWidth, start = Math.round(left / w);
+      const delta = f.scrollLeft - left;
+      const i = Math.max(0, Math.min(2, Math.abs(delta) > w * 0.18 ? start + Math.sign(delta) : start));
+      flip(f.closest('.asset'), i);
+    });
+    root.addEventListener('click', (e) => {
+      const dot = e.target.closest('.dots button');
+      if (dot) { e.stopPropagation(); flip(dot.closest('.asset'), +dot.dataset.face); return; }
+      if (moved) { e.stopPropagation(); e.preventDefault(); moved = false; }
+    }, true);
+    root.addEventListener('keydown', (e) => {
+      const f = e.target.closest && e.target.closest('.faces');
+      if (!f || !['ArrowLeft', 'ArrowRight'].includes(e.key)) return;
+      e.preventDefault();
+      const i = Math.max(0, Math.min(2, faceIndex(f) + (e.key === 'ArrowRight' ? 1 : -1)));
+      flip(f.closest('.asset'), i);
+    });
+    $('#period').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) setPeriod(+b.dataset.face); });
   }
 
   function renderHero() {
     const a = M.assets.USDBRL;
     const host = $('#usd-hero');
     if (!a.quote && !a.candles.length) {
-      host.innerHTML = loading ? '<div class="skeleton tall"></div>' : `<div class="label">Dólar comercial · USD/BRL</div><p class="empty">Cotação indisponível no momento. Verifique a conexão e toque em atualizar.</p>`;
+      host.innerHTML = loading ? '<div class="skeleton tall"></div>' : `<h2>Dólar comercial</h2><p class="empty">Cotação indisponível no momento. Verifique a conexão e toque em atualizar.</p>`;
       return;
     }
     const q = a.quote || {};
     const ptax = M.macro && M.macro.ptaxUsd;
     const cl = closes(a);
     const vol = ind.annualizedVolatility(cl, 21);
-    host.innerHTML = `
+    host.innerHTML = `${chart.guilloche(100)}
       <div class="hero-grid">
-        <div>
-          <div class="hero-top"><span class="label">Dólar comercial · USD/BRL</span>${freshTag(a.fresh)}</div>
-          <div class="big">${px(a, q.price)}</div>
+        <div class="h-head">
+          <div class="hero-top"><h2>Dólar comercial<small>USD/BRL</small></h2>${freshTag(a.fresh)}</div>
+          <div class="numeral big">${numeral(a, q.price)}</div>
           <div class="row">${q.changePct != null ? badge(q.changePct) : ''}
-            ${q.prevClose ? `<span class="muted small">Fech. anterior ${px(a, q.prevClose)}</span>` : ''}</div>
-          <dl class="kv">
-            <div><dt>Máx. / mín. do dia</dt><dd>${q.high ? fmt.num(q.high, 4) + ' / ' + fmt.num(q.low, 4) : '—'}</dd></div>
-            <div><dt>PTAX (BCB)</dt><dd>${ptax ? fmt.num(ptax.value, 4) + ' <small class="muted">' + fmt.dateBR(ptax.date).slice(0, 5) + '</small>' : '—'}</dd></div>
-            <div><dt>Variação 1 mês</dt><dd class="${fmt.signClass(chgOver(a, 21))}">${fmt.pct(chgOver(a, 21))}</dd></div>
-            <div><dt>Variação 12 meses</dt><dd class="${fmt.signClass(chgOver(a, 252))}">${fmt.pct(chgOver(a, 252))}</dd></div>
-            <div><dt>Máx. 52 semanas</dt><dd>${fmt.num(a.high52, 4)}</dd></div>
-            <div><dt>Mín. 52 semanas</dt><dd>${fmt.num(a.low52, 4)}</dd></div>
-            <div><dt>Volatilidade 21d</dt><dd>${vol != null ? fmt.pct(vol, 1, false) + ' a.a.' : '—'}</dd></div>
-            <div><dt>Fonte</dt><dd class="small">${esc(q.source || '—')}</dd></div>
-          </dl>
+            ${q.prevClose ? `<span class="small" style="color:var(--text-2)">Fechamento anterior ${fmt.num(q.prevClose, 4)}</span>` : ''}</div>
         </div>
-        <div>
+        <dl class="facts h-facts">
+            <div><dt>Máxima / mínima do dia</dt><dd>${q.high ? fmt.num(q.high, 4) + ' / ' + fmt.num(q.low, 4) : '—'}</dd></div>
+            <div><dt>PTAX do Banco Central</dt><dd>${ptax ? fmt.num(ptax.value, 4) + ' <small style="color:var(--text-2)">' + fmt.dateBR(ptax.date).slice(0, 5) + '</small>' : '—'}</dd></div>
+            <div><dt>Variação em 1 mês</dt><dd class="${fmt.signClass(chgOver(a, 21))}">${fmt.pct(chgOver(a, 21))}</dd></div>
+            <div><dt>Variação em 12 meses</dt><dd class="${fmt.signClass(chgOver(a, 252))}">${fmt.pct(chgOver(a, 252))}</dd></div>
+            <div><dt>Faixa de 52 semanas</dt><dd>${fmt.num(a.low52, 4)} – ${fmt.num(a.high52, 4)}</dd></div>
+            <div><dt>Volatilidade (21 dias)</dt><dd>${vol != null ? fmt.pct(vol, 1, false) + ' ao ano' : '—'}</dd></div>
+        </dl>
+        <div class="h-chart">
           <div class="toolbar"><div class="chips" id="hero-range" role="group" aria-label="Período do gráfico">
             ${[[21, '1M'], [63, '3M'], [126, '6M'], [252, '1A']].map(([n, l]) => `<button type="button" data-r="${n}" class="${ui.heroRange === n ? 'on' : ''}">${l}</button>`).join('')}
-          </div><a href="#analise" class="small" data-goto="USDBRL">Análise completa →</a></div>
-          <div id="hero-chart" class="chart-box" style="height:210px"></div>
-          <p class="muted small">Histórico diário: ${esc(a.histSource || '—')}. A PTAX é a taxa oficial calculada pelo Banco Central; o dólar comercial é negociado ao longo do dia.</p>
+          </div><a href="#analise" class="small" data-goto="USDBRL">Análise completa</a></div>
+          <div id="hero-chart" class="chart-box" style="height:220px"></div>
+          <p class="src">Arraste o dedo no gráfico para ver cada dia. Cotação: ${esc(q.source || '—')} · histórico: ${esc(a.histSource || '—')}. A PTAX é a taxa oficial do Banco Central; o comercial é negociado ao longo do dia.</p>
         </div>
       </div>`;
     drawHeroChart();
@@ -156,7 +263,7 @@
     if (c.length < 2) { box.innerHTML = '<p class="empty">Histórico indisponível.</p>'; return; }
     chart.line(box, {
       dates: c.map((x) => x.date), height: 210,
-      series: [{ values: c.map((x) => x.close), color: '#4f8cff', label: 'USD/BRL', area: true, width: 1.8 }],
+      series: [{ values: c.map((x) => x.close), color: INK_HEX[100], label: 'USD/BRL', area: true, width: 2 }],
       yFormat: (v) => fmt.num(v, 2), tooltipFormat: (v) => fmt.num(v, 4), ariaLabel: 'Gráfico do dólar',
     });
   }
@@ -169,7 +276,7 @@
       $('#macro-chart').innerHTML = '';
       return;
     }
-    const card = (k, v, d, title) => `<div class="card" title="${esc(title || '')}"><div class="k">${k}</div><div class="v">${v}</div><div class="d">${d}</div></div>`;
+    const card = (k, v, d, title) => `<div class="m" title="${esc(title || '')}"><div class="k">${k}</div><div class="numeral v">${v}</div><div class="d">${d}</div></div>`;
     const items = [];
     if (m.selic) items.push(card('Selic (meta)', fmt.pct(m.selic.value, 2, false) + ' <small>a.a.</small>', `desde ${fmt.dateBR(m.selic.since)}`, 'Meta da taxa Selic definida pelo Copom'));
     if (m.cdi) items.push(card('CDI', fmt.pct(m.cdi.value, 2, false) + ' <small>a.a.</small>', `em ${fmt.dateBR(m.cdi.date)}`, 'CDI anualizado (base 252)'));
@@ -177,7 +284,7 @@
     if (m.ipca12) items.push(card('IPCA 12 meses', fmt.pct(m.ipca12.value, 2, false), `até ${monthBR(m.ipca12.date)}`));
     if (m.realRate != null) items.push(card('Juro real', fmt.pct(m.realRate, 2, false) + ' <small>a.a.</small>', 'Selic ÷ IPCA 12m (ex-post)', 'Aproximação: (1+Selic)/(1+IPCA 12 meses) − 1'));
     host.innerHTML = items.join('');
-    $('#macro-chart-note').textContent = (m.fromSnapshot ? 'Cópia do servidor · ' : 'Atualizado ') + fmt.dateTimeBR(m.fetchedAt);
+    $('#macro-chart-note').textContent = 'Banco Central · ' + (m.fromSnapshot ? 'cópia do servidor, ' : 'atualizado ') + fmt.dateTimeBR(m.fetchedAt);
 
     if (m.ipca12 && m.selic) {
       const months = m.ipca12.series.slice(-24);
@@ -189,8 +296,8 @@
       chart.line($('#macro-chart'), {
         dates: months.map(([d]) => d), height: 200,
         series: [
-          { values: sel, color: '#e9b949', label: 'Selic (meta)' },
-          { values: months.map(([, v]) => v), color: '#f2555a', label: 'IPCA 12m' },
+          { values: sel, color: INK_HEX[5], label: 'Selic (meta)', width: 2.2 },
+          { values: months.map(([, v]) => v), color: '#f4f1ff', label: 'IPCA 12m', width: 1.6, dash: '5 4' },
         ],
         yFormat: (v) => fmt.num(v, 1) + '%', tooltipFormat: (v) => fmt.num(v, 2) + '%', ariaLabel: 'Selic e IPCA 12 meses',
       });
@@ -201,14 +308,15 @@
   function renderAnalysis() {
     const list = Object.values(M.assets);
     if (!M.assets[ui.anKey]) ui.anKey = 'USDBRL';
-    $('#an-assets').innerHTML = list.map((a) => `<button type="button" role="tab" data-k="${a.key}" aria-selected="${a.key === ui.anKey}">${esc(a.short)}</button>`).join('');
+    $('#an-assets').innerHTML = list.map((a) => `<button type="button" role="tab" data-k="${a.key}" data-ink="${inkOf(a)}" aria-selected="${a.key === ui.anKey}">${esc(a.short)}</button>`).join('');
     $$('#an-range button').forEach((b) => b.classList.toggle('on', +b.dataset.r === ui.anRange));
     $('#an-ema9').checked = ui.ema9; $('#an-ema21').checked = ui.ema21;
 
     const a = M.assets[ui.anKey];
     const q = a.quote;
+    $('#an-head').dataset.ink = inkOf(a);
     $('#an-head').innerHTML = `<div><h2>${esc(a.name)}</h2>${freshTag(a.fresh)}</div>
-      <div style="text-align:right"><div class="px">${q ? px(a, q.price) : '—'}</div>${q && q.changePct != null ? badge(q.changePct, q.changeLabel ? ` <small>${q.changeLabel}</small>` : '') : ''}</div>`;
+      <div style="text-align:right"><div class="numeral px">${q ? numeral(a, q.price) : '—'}</div>${q && q.changePct != null ? badge(q.changePct, q.changeLabel ? ` <small>${q.changeLabel}</small>` : '') : ''}</div>`;
 
     const cl = closes(a);
     if (cl.length < 30) {
@@ -221,9 +329,9 @@
     const n = Math.min(ui.anRange, cl.length);
     const from = cl.length - n;
     const dates = a.candles.slice(from).map((c) => c.date);
-    const series = [{ values: cl.slice(from), color: '#4f8cff', label: 'Fechamento', area: true, width: 1.8 }];
-    if (ui.ema9) series.push({ values: e9.slice(from), color: '#e9b949', label: 'EMA 9', width: 1.3 });
-    if (ui.ema21) series.push({ values: e21.slice(from), color: '#b07cff', label: 'EMA 21', width: 1.3 });
+    const series = [{ values: cl.slice(from), color: INK_HEX[inkOf(a)], label: 'Fechamento', area: true, width: 2 }];
+    if (ui.ema9) series.push({ values: e9.slice(from), color: INK_HEX[20], label: 'EMA 9', width: 1.4 });
+    if (ui.ema21) series.push({ values: e21.slice(from), color: INK_HEX[5], label: 'EMA 21', width: 1.4 });
     const dec = a.unit === 'BRL' ? 4 : 2;
     const c1 = chart.line($('#an-chart'), {
       dates, height: 280, series,
@@ -231,8 +339,8 @@
     });
     const c2 = chart.line($('#an-rsi'), {
       dates, height: 110, hideX: true, yDomain: [0, 100],
-      series: [{ values: r.slice(from), color: '#22c55e', label: 'RSI 14', width: 1.4 }],
-      refLines: [{ y: 70, color: '#f2555a' }, { y: 30, color: '#22c55e' }],
+      series: [{ values: r.slice(from), color: '#eef2fb', label: 'RSI 14', width: 1.5 }],
+      refLines: [{ y: 70, color: '#ff6b5e' }, { y: 30, color: '#3ad08c' }],
       yFormat: (v) => fmt.num(v, 0), tooltipFormat: (v) => fmt.num(v, 1), ariaLabel: 'RSI 14',
     });
     chart.link(c1, c2);
@@ -337,8 +445,8 @@
     const ce = chart.line($('#bt-equity'), {
       dates, height: 240,
       series: [
-        { values: res.equity.map((e) => e.equity), color: '#4f8cff', label: 'Estratégia', width: 1.8 },
-        { values: res.buyHold.equity.map((e) => e.equity), color: '#a9b4ca', label: 'Buy and hold', width: 1.2, dash: '4 3' },
+        { values: res.equity.map((e) => e.equity), color: INK_HEX[inkOf(a)], label: 'Estratégia', width: 2 },
+        { values: res.buyHold.equity.map((e) => e.equity), color: '#b9c4dc', label: 'Buy and hold', width: 1.3, dash: '4 3' },
       ],
       yFormat: (v) => fmt.num(v, 0), tooltipFormat: (v) => m(v), ariaLabel: 'Curva de patrimônio',
     });
@@ -353,9 +461,9 @@
     const cp = chart.line($('#bt-price'), {
       dates: slice.map((c) => c.date), height: 240, markers,
       series: [
-        { values: slice.map((c) => c.close), color: '#4f8cff', label: 'Fechamento', width: 1.5 },
-        { values: res.series.emaFast.slice(off), color: '#e9b949', label: `EMA ${res.params.fast}`, width: 1.1 },
-        { values: res.series.emaSlow.slice(off), color: '#b07cff', label: `EMA ${res.params.slow}`, width: 1.1 },
+        { values: slice.map((c) => c.close), color: INK_HEX[inkOf(a)], label: 'Fechamento', width: 1.6 },
+        { values: res.series.emaFast.slice(off), color: INK_HEX[20], label: `EMA ${res.params.fast}`, width: 1.2 },
+        { values: res.series.emaSlow.slice(off), color: INK_HEX[5], label: `EMA ${res.params.slow}`, width: 1.2 },
       ],
       yFormat: (v) => fmt.num(v, a.unit === 'BRL' ? 2 : v >= 1000 ? 0 : 2), tooltipFormat: (v) => fmt.num(v, dec), ariaLabel: 'Preço com operações',
     });
@@ -491,6 +599,7 @@
 
   // ------------------------------------------------------------------ eventos
   function bind() {
+    bindFaces();
     document.addEventListener('click', (ev) => {
       const card = ev.target.closest('[data-asset]');
       if (card) { ui.anKey = card.dataset.asset; saveUI(); location.hash = 'analise'; return; }
