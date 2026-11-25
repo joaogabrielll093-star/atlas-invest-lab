@@ -200,7 +200,7 @@ async function waitLoaded(page) {
   await op.goto(BASE);
   await waitLoaded(op);
   await op.waitForTimeout(600); // grava o cache
-  await off.route(/^https:\/\//, (r) => r.abort());
+  await off.route((url) => url.origin !== new URL(BASE).origin, (r) => r.abort());
   await off.route(/data\/market\.json/, (r) => r.abort());
   await op.evaluate(() => {
     // simula que a última atualização foi há 2 horas
@@ -221,7 +221,8 @@ async function waitLoaded(page) {
 
   // b) primeira visita, tudo fora do ar
   const off2 = await browser.newContext({ viewport: { width: 390, height: 844 } });
-  await off2.route(/^https:\/\//, (r) => r.abort());
+  // bloqueia as APIs externas, mas não o próprio site (que pode estar em HTTPS)
+  await off2.route((url) => url.origin !== new URL(BASE).origin, (r) => r.abort());
   await off2.route(/data\/market\.json/, (r) => r.abort());
   const op2 = await off2.newPage();
   op2.on('pageerror', (e) => oErrors.push(e.message));
